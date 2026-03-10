@@ -1,0 +1,2625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>/* QwikLink instant public page router */!function(){var s=new URLSearchParams(location.search).get('slug');if(s){document.documentElement.style.cssText='visibility:hidden;opacity:0';window.__QL_SLUG=s;}}();</script>
+<style id="_qlHide">html,body{visibility:hidden!important;pointer-events:none!important}</style>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QwikLink — One Link. Every Customer.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<!-- Firebase v10 (modular via compat shim) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<!-- QR Code -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+/* ══════════════════════════════════════
+   TOKENS — WHITE THEME
+══════════════════════════════════════ */
+:root {
+  --or:#FF5C00; --or2:#FF7A2E; --or3:#FFF4EE; --or-glow:rgba(255,92,0,.12);
+  --bk:#0D0D0D; --txt:#111111; --txt2:#444444; --muted:#888888;
+  --bg:#FFFFFF; --bg2:#FAFAFA; --bg3:#F5F4F1;
+  --card:#FFFFFF; --card2:#F7F7F5;
+  --border:#E8E8E8; --border2:#F0F0F0;
+  --gold:#FFE14D; --grn:#22C55E; --red:#EF4444; --blue:#1A73E8;
+  --r-sm:10px; --r-md:16px; --r-lg:22px; --r-xl:28px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 16px rgba(0,0,0,.08);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.1);
+  --shadow-xl:0 24px 64px rgba(0,0,0,.12);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);overflow-x:hidden;}
+h1,h2,h3,h4,h5{font-family:'Syne',sans-serif;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:#f0f0f0;}
+::-webkit-scrollbar-thumb{background:var(--or);border-radius:99px;}
+img{display:block;max-width:100%;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:'DM Sans',sans-serif;}
+input,select,textarea{font-family:'DM Sans',sans-serif;}
+
+/* ══════════════════════════════════════
+   NAVBAR
+══════════════════════════════════════ */
+#mainNav {
+  position:fixed; top:0; left:0; right:0; z-index:900;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:0 6%; height:70px;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  transition:box-shadow .3s;
+}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.45rem;letter-spacing:-.5px;cursor:pointer;}
+.logo .ql{color:var(--or);}
+.logo .lk{color:var(--bk);}
+.logo-dot{display:inline-block;width:7px;height:7px;background:var(--or);border-radius:50%;margin:0 1px 3px;box-shadow:0 0 8px rgba(255,92,0,.5);vertical-align:middle;}
+nav ul{display:flex;gap:2rem;list-style:none;}
+nav ul a{color:var(--txt2);font-weight:500;font-size:.9rem;transition:color .2s;}
+nav ul a:hover{color:var(--or);}
+.nav-actions{display:flex;gap:12px;align-items:center;}
+.btn-nav-login{background:transparent;border:1.5px solid var(--border);color:var(--txt);padding:9px 20px;border-radius:100px;font-weight:600;font-size:.875rem;transition:all .2s;}
+.btn-nav-login:hover{border-color:var(--or);color:var(--or);}
+.btn-nav-cta{background:var(--or);color:#fff;padding:10px 22px;border-radius:100px;font-weight:700;font-size:.875rem;border:none;transition:all .2s;box-shadow:0 4px 16px rgba(255,92,0,.3);}
+.btn-nav-cta:hover{background:var(--or2);transform:translateY(-1px);box-shadow:0 6px 24px rgba(255,92,0,.4);}
+
+/* ══════════════════════════════════════
+   HERO
+══════════════════════════════════════ */
+#hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding:100px 6% 60px;gap:4rem;
+  background:#fff;position:relative;overflow:hidden;
+}
+.hero-noise{position:absolute;inset:0;opacity:.018;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");background-size:200px;}
+.hero-glow{position:absolute;top:10%;right:-5%;width:600px;height:600px;background:radial-gradient(circle,rgba(255,92,0,.08) 0%,transparent 70%);pointer-events:none;}
+.hero-glow2{position:absolute;bottom:-10%;left:-5%;width:500px;height:500px;background:radial-gradient(circle,rgba(255,92,0,.05) 0%,transparent 70%);pointer-events:none;}
+.hero-left{flex:1;max-width:560px;position:relative;z-index:2;}
+.hero-pill{display:inline-flex;align-items:center;gap:8px;background:var(--or3);border:1px solid rgba(255,92,0,.2);color:var(--or);padding:7px 16px;border-radius:100px;font-size:.78rem;font-weight:700;letter-spacing:.3px;margin-bottom:1.5rem;}
+h1.htitle{font-size:clamp(2.6rem,5.5vw,4.2rem);font-weight:800;color:var(--bk);line-height:1.05;letter-spacing:-1.5px;}
+h1.htitle .or{color:var(--or);}
+.hero-sub{color:var(--txt2);font-size:1.05rem;line-height:1.75;max-width:460px;margin-top:1rem;}
+.hero-btns{display:flex;gap:12px;margin-top:2rem;flex-wrap:wrap;}
+.btn-primary{background:var(--or);color:#fff;padding:14px 28px;border-radius:100px;font-weight:700;font-size:1rem;border:none;transition:all .2s;box-shadow:0 6px 24px rgba(255,92,0,.35);}
+.btn-primary:hover{background:var(--or2);transform:translateY(-2px);box-shadow:0 10px 32px rgba(255,92,0,.45);}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--txt);padding:13px 24px;border-radius:100px;font-weight:600;font-size:.95rem;transition:all .2s;}
+.btn-ghost:hover{border-color:var(--or);color:var(--or);background:var(--or3);}
+.hero-trust{display:flex;align-items:center;gap:12px;margin-top:2.5rem;}
+.trust-avatars{display:flex;}
+.trust-avatars img{width:36px;height:36px;border-radius:50%;border:2.5px solid #fff;margin-left:-10px;object-fit:cover;}
+.trust-avatars img:first-child{margin-left:0;}
+.trust-txt{font-size:.85rem;color:var(--txt2);}<br/>.trust-txt strong{color:var(--txt);}
+.hero-right{flex:1;display:flex;justify-content:center;align-items:center;position:relative;z-index:2;}
+.phone-wrap{position:relative;}
+.new-phone{
+  width:300px;height:580px;background:#fff;border-radius:48px;
+  border:8px solid #111;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.2),0 0 0 1px rgba(0,0,0,.08);
+  position:relative;
+}
+.new-phone::before{content:'';position:absolute;top:18px;left:50%;transform:translateX(-50%);width:80px;height:6px;background:#111;border-radius:99px;z-index:10;}
+.ph-screen{height:100%;overflow-y:auto;scrollbar-width:none;}
+.ph-cover{height:180px;background:linear-gradient(135deg,#b03000,#FF5C00);position:relative;overflow:hidden;}
+.ph-cover-img{width:100%;height:100%;object-fit:cover;}
+.ph-cover-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0) 30%,rgba(0,0,0,.75));}
+.ph-rinfo{position:absolute;bottom:0;left:0;right:0;padding:12px 14px;}
+.ph-rname{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ph-rmeta{font-size:.65rem;color:rgba(255,255,255,.85);margin-top:3px;}
+.ph-open{background:#22C55E;color:#fff;padding:2px 7px;border-radius:100px;font-size:.6rem;font-weight:700;}
+.ph-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px;background:#fff;}
+.ph-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:10px;border-radius:12px;font-weight:700;font-size:.72rem;border:none;cursor:pointer;}
+.ph-btn.call{background:#FF5C00;color:#fff;}
+.ph-btn.wa{background:#25D366;color:#fff;}
+.ph-btn.dir{background:#1A73E8;color:#fff;}
+.ph-btn.ord{background:#111;color:#fff;}
+.ph-gallery{display:flex;gap:6px;overflow-x:auto;padding:10px 12px;scrollbar-width:none;background:#fff;border-top:1px solid #f5f5f5;}
+.ph-gimg{width:70px;height:55px;border-radius:9px;object-fit:cover;flex-shrink:0;}
+.ph-section{padding:12px 14px;background:#fff;border-top:6px solid #f9f9f7;}
+.ph-stitle{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:800;color:#111;margin-bottom:8px;}
+.ph-offer{background:linear-gradient(135deg,#FF5C00,#FF8C00);border-radius:10px;padding:9px 12px;font-size:.65rem;color:#fff;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.ph-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f5f5f5;}
+.ph-iimg{width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0;}
+.ph-iname{font-size:.7rem;font-weight:700;color:#111;}
+.ph-iprice{font-size:.68rem;font-weight:800;color:#FF5C00;font-family:'Space Mono',monospace;}
+.phone-float1{position:absolute;top:-30px;right:-80px;background:#fff;border:1px solid var(--border);border-radius:16px;padding:12px 16px;box-shadow:var(--shadow-lg);white-space:nowrap;}
+.phone-float2{position:absolute;bottom:40px;left:-90px;background:#fff;border:1px solid var(--border);border-radius:16px;padding:12px 16px;box-shadow:var(--shadow-lg);white-space:nowrap;}
+.float-label{font-size:.7rem;color:var(--muted);font-weight:600;}
+.float-val{font-size:.85rem;font-weight:700;color:var(--txt);margin-top:2px;}
+.float-or{color:var(--or);}
+
+/* ══════════════════════════════════════
+   SECTIONS
+══════════════════════════════════════ */
+.section{padding:100px 6%;}
+.section.alt{background:var(--bg3);}
+.sec-label{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--or);letter-spacing:3px;text-transform:uppercase;margin-bottom:1rem;}
+.sec-title{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;color:var(--bk);line-height:1.1;}
+.sec-sub{color:var(--muted);font-size:1rem;line-height:1.75;max-width:500px;margin-top:.8rem;}
+
+/* ══════════════════════════════════════
+   HOW IT WORKS
+══════════════════════════════════════ */
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3.5rem;}
+.how-card{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r-xl);padding:2rem;position:relative;transition:all .3s;}
+.how-card:hover{border-color:var(--or);transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.how-num{width:52px;height:52px;background:var(--or3);border:1.5px solid rgba(255,92,0,.2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--or);margin-bottom:1.25rem;}
+.how-card h3{font-size:1.05rem;font-weight:800;color:var(--bk);margin-bottom:.5rem;}
+.how-card p{font-size:.875rem;color:var(--txt2);line-height:1.65;}
+.how-arrow{display:none;}
+
+/* ══════════════════════════════════════
+   CATEGORIES
+══════════════════════════════════════ */
+.cats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:3rem;}
+.cat-card{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:1.75rem 1.25rem;text-align:center;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
+.cat-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,92,0,.04),transparent);opacity:0;transition:opacity .3s;}
+.cat-card:hover{border-color:var(--or);transform:translateY(-4px);box-shadow:0 12px 32px rgba(255,92,0,.12);}
+.cat-card:hover::after{opacity:1;}
+.cat-icon{font-size:2.4rem;margin-bottom:.75rem;}
+.cat-name{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:800;color:var(--bk);margin-bottom:.3rem;}
+.cat-desc{font-size:.75rem;color:var(--muted);}
+.cat-badge{display:inline-flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-top:.6rem;}
+.cat-plat{font-size:.62rem;background:var(--bg3);color:var(--txt2);padding:2px 7px;border-radius:100px;font-weight:600;}
+
+/* ══════════════════════════════════════
+   DEMO SECTION
+══════════════════════════════════════ */
+#demo{padding:100px 6%;background:var(--bg3);}
+.demo-phones{display:flex;gap:2rem;overflow-x:auto;padding:2rem 0;scrollbar-width:none;justify-content:center;}
+.demo-label{text-align:center;font-size:.75rem;font-weight:700;color:var(--muted);margin-top:1rem;font-family:'Space Mono',monospace;}
+.demo-phone-wrap{flex-shrink:0;text-align:center;}
+.demo-phone{
+  width:240px;height:460px;background:#fff;border-radius:36px;
+  border:6px solid #111;overflow:hidden;
+  box-shadow:0 24px 60px rgba(0,0,0,.15);
+  position:relative;
+}
+.demo-phone::before{content:'';position:absolute;top:12px;left:50%;transform:translateX(-50%);width:60px;height:5px;background:#111;border-radius:99px;z-index:10;}
+.demo-screen{height:100%;overflow:hidden;}
+.ds-cover{height:130px;position:relative;overflow:hidden;}
+.ds-cover img{width:100%;height:100%;object-fit:cover;}
+.ds-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(0,0,0,.7));}
+.ds-info{position:absolute;bottom:0;left:0;right:0;padding:8px 10px;}
+.ds-name{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;color:#fff;}
+.ds-meta{font-size:.6rem;color:rgba(255,255,255,.8);margin-top:2px;}
+.ds-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:8px;}
+.ds-btn{padding:8px;border-radius:10px;font-weight:700;font-size:.63rem;border:none;display:flex;align-items:center;justify-content:center;gap:4px;}
+.ds-btn.c{background:#FF5C00;color:#fff;}
+.ds-btn.w{background:#25D366;color:#fff;}
+.ds-btn.d{background:#1A73E8;color:#fff;}
+.ds-btn.o{background:#111;color:#fff;}
+.ds-gallery{display:flex;gap:5px;padding:6px 8px;overflow:hidden;background:#fff;border-top:1px solid #f5f5f5;}
+.ds-gimg{width:58px;height:44px;border-radius:7px;object-fit:cover;flex-shrink:0;}
+.ds-item{display:flex;align-items:center;gap:6px;padding:6px 8px;border-bottom:1px solid #f9f9f9;}
+.ds-iimg{width:34px;height:34px;border-radius:7px;object-fit:cover;flex-shrink:0;}
+.ds-iname{font-size:.6rem;font-weight:700;color:#111;}
+.ds-iprice{font-size:.6rem;color:#FF5C00;font-weight:800;font-family:'Space Mono',monospace;}
+
+/* ══════════════════════════════════════
+   FEATURES GRID
+══════════════════════════════════════ */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;}
+.feat-card{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:1.75rem;transition:all .3s;}
+.feat-card:hover{border-color:var(--or);box-shadow:0 8px 32px rgba(255,92,0,.08);transform:translateY(-3px);}
+.feat-icon{width:48px;height:48px;background:var(--or3);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1rem;}
+.feat-card h3{font-size:.95rem;font-weight:800;color:var(--bk);margin-bottom:.4rem;}
+.feat-card p{font-size:.825rem;color:var(--txt2);line-height:1.65;}
+
+/* ══════════════════════════════════════
+   PRICING
+══════════════════════════════════════ */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;}
+.price-card{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r-xl);padding:2.5rem;transition:all .3s;position:relative;}
+.price-card.popular{border-color:var(--or);box-shadow:0 12px 48px rgba(255,92,0,.15);}
+.popular-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--or);color:#fff;font-size:.72rem;font-weight:800;padding:5px 16px;border-radius:100px;white-space:nowrap;font-family:'Space Mono',monospace;}
+.price-plan{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--or);letter-spacing:3px;margin-bottom:1rem;}
+.price-amount{font-family:'Syne',sans-serif;font-size:2.6rem;font-weight:800;color:var(--bk);line-height:1;}
+.price-period{font-size:.9rem;color:var(--muted);font-weight:400;}
+.price-desc{font-size:.875rem;color:var(--txt2);margin-top:.6rem;}
+.price-divider{height:1px;background:var(--border);margin:1.5rem 0;}
+.price-features{list-style:none;}
+.price-features li{font-size:.875rem;color:var(--txt2);padding:7px 0;display:flex;align-items:center;gap:10px;}
+.price-features li::before{content:'✓';width:20px;height:20px;background:var(--or3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;color:var(--or);flex-shrink:0;}
+.price-cta{width:100%;padding:14px;border-radius:100px;font-weight:700;font-size:.9rem;border:none;margin-top:1.75rem;transition:all .2s;cursor:pointer;}
+.price-cta.solid{background:var(--or);color:#fff;box-shadow:0 4px 16px rgba(255,92,0,.3);}
+.price-cta.solid:hover{background:var(--or2);transform:translateY(-1px);}
+.price-cta.outline{background:transparent;border:1.5px solid var(--border);color:var(--txt);}
+.price-cta.outline:hover{border-color:var(--or);color:var(--or);}
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+footer{background:var(--bk);color:#aaa;padding:60px 6% 32px;}
+.footer-top{display:flex;justify-content:space-between;gap:3rem;margin-bottom:3rem;}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.45rem;}
+.footer-logo .ql{color:var(--or);}
+.footer-logo .lk{color:#fff;}
+.footer-logo .dot{display:inline-block;width:7px;height:7px;background:var(--or);border-radius:50%;margin:0 1px 3px;vertical-align:middle;}
+.footer-tagline{font-size:.85rem;color:#666;margin-top:.5rem;}
+.footer-links h4{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;color:#fff;margin-bottom:1rem;}
+.footer-links a{display:block;font-size:.85rem;color:#666;margin-bottom:.5rem;transition:color .2s;}
+.footer-links a:hover{color:var(--or);}
+.footer-bottom{border-top:1px solid #1a1a1a;padding-top:1.5rem;display:flex;justify-content:space-between;font-size:.8rem;color:#555;}
+
+/* ══════════════════════════════════════
+   MODALS
+══════════════════════════════════════ */
+.modal-overlay{
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+  padding:20px;
+}
+.modal-overlay.show{opacity:1;pointer-events:all;}
+.modal-box{
+  background:#fff;border-radius:var(--r-xl);
+  width:100%;max-width:680px;
+  max-height:92vh;overflow-y:auto;
+  box-shadow:0 32px 80px rgba(0,0,0,.2);
+  position:relative;
+  animation:slideUp .35s cubic-bezier(.22,.68,0,1.2);
+}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal-close{
+  position:absolute;top:18px;right:18px;width:36px;height:36px;
+  background:var(--bg3);border:none;border-radius:50%;
+  font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:var(--txt2);transition:all .2s;z-index:10;
+}
+.modal-close:hover{background:var(--border);color:var(--bk);}
+
+/* ══════════════════════════════════════
+   WIZARD
+══════════════════════════════════════ */
+.wiz-head{padding:28px 32px 0;}
+.wiz-title{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--bk);}
+.wiz-sub{font-size:.875rem;color:var(--muted);margin-top:.3rem;}
+.wiz-progress{display:flex;gap:0;margin:24px 32px 0;border-bottom:1px solid var(--border);padding-bottom:0;}
+.prog-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding-bottom:12px;position:relative;cursor:default;}
+.prog-item::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:transparent;transition:background .3s;}
+.prog-item.active::after{background:var(--or);}
+.prog-item.done::after{background:var(--or);}
+.prog-circle{width:28px;height:28px;border-radius:50%;background:var(--bg3);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:var(--muted);font-family:'Space Mono',monospace;transition:all .3s;}
+.prog-item.active .prog-circle{background:var(--or);border-color:var(--or);color:#fff;}
+.prog-item.done .prog-circle{background:var(--or);border-color:var(--or);color:#fff;}
+.prog-label{font-size:.62rem;font-weight:600;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:.5px;text-transform:uppercase;}
+.prog-item.active .prog-label{color:var(--or);}
+
+.wiz-body{padding:24px 32px 32px;}
+.wizard-step{display:none;}
+.wizard-step.active{display:block;}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-group{margin-bottom:16px;}
+.form-group.full{grid-column:1/-1;}
+.form-label{display:block;font-family:'Space Mono',monospace;font-size:.68rem;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.form-input{width:100%;border:1.5px solid var(--border);border-radius:var(--r-md);padding:13px 16px;font-size:.95rem;color:var(--bk);background:var(--bg);outline:none;transition:border-color .2s;}
+.form-input:focus{border-color:var(--or);}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--bg3);border-radius:var(--r-md);}
+.toggle-label{font-size:.9rem;font-weight:600;color:var(--bk);}
+.toggle-sw{width:48px;height:26px;background:var(--border);border-radius:100px;position:relative;cursor:pointer;transition:background .3s;border:none;}
+.toggle-sw::before{content:'';position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .3s;box-shadow:0 1px 4px rgba(0,0,0,.15);}
+.toggle-sw.on{background:var(--grn);}
+.toggle-sw.on::before{transform:translateX(22px);}
+
+/* Upload zones */
+.upload-zone{border:2px dashed var(--border);border-radius:var(--r-lg);padding:2rem;text-align:center;cursor:pointer;transition:all .3s;background:var(--bg3);position:relative;overflow:hidden;}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--or);background:var(--or3);}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.upload-icon{font-size:2rem;margin-bottom:.5rem;}
+.upload-text{font-size:.875rem;color:var(--txt2);font-weight:500;}
+.upload-hint{font-size:.75rem;color:var(--muted);margin-top:.3rem;}
+.cover-preview{width:100%;height:160px;border-radius:var(--r-md);overflow:hidden;position:relative;}
+.cover-preview img{width:100%;height:100%;object-fit:cover;}
+.cover-preview-remove{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:.8rem;}
+.gallery-grid{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+.gallery-thumb{width:90px;height:70px;border-radius:10px;overflow:hidden;position:relative;border:1.5px solid var(--border);}
+.gallery-thumb img{width:100%;height:100%;object-fit:cover;}
+.gallery-thumb-remove{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:18px;height:18px;cursor:pointer;font-size:.6rem;display:flex;align-items:center;justify-content:center;}
+.gallery-add-btn{width:90px;height:70px;border-radius:10px;border:2px dashed var(--border);background:var(--bg3);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-size:.65rem;color:var(--muted);font-weight:600;gap:4px;position:relative;transition:all .2s;overflow:hidden;}
+.gallery-add-btn:hover{border-color:var(--or);background:var(--or3);color:var(--or);}
+.gallery-add-btn input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+
+/* Platform chips */
+.plat-chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;}
+.plat-chip{display:flex;align-items:center;gap:6px;padding:8px 14px;border:1.5px solid var(--border);border-radius:100px;cursor:pointer;transition:all .2s;font-size:.82rem;font-weight:600;color:var(--txt2);}
+.plat-chip:hover{border-color:var(--or);color:var(--or);background:var(--or3);}
+.plat-chip.on{border-color:var(--or);color:var(--or);background:var(--or3);}
+.plat-inputs{margin-top:8px;}
+
+/* Product cards */
+.product-card{background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r-md);padding:14px;margin-bottom:12px;transition:all .2s;}
+.product-card:hover{border-color:var(--border2);}
+.pc-row{display:flex;gap:10px;align-items:flex-start;}
+.product-thumb-wrap{width:60px;flex-shrink:0;}
+.product-thumb-preview{width:60px;height:60px;border-radius:10px;border:1.5px dashed var(--border);overflow:hidden;position:relative;cursor:pointer;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:all .2s;}
+.product-thumb-preview:hover{border-color:var(--or);}
+.product-thumb-preview input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.product-thumb-preview img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.pc-fields{flex:1;display:flex;flex-direction:column;gap:8px;}
+.pc-remove{background:none;border:none;color:var(--muted);font-size:1rem;cursor:pointer;padding:4px;border-radius:6px;transition:all .2s;}
+.pc-remove:hover{color:var(--red);background:#fff5f5;}
+.add-item-btn{background:var(--or3);border:1.5px dashed rgba(255,92,0,.3);color:var(--or);padding:10px;border-radius:var(--r-md);font-weight:700;font-size:.85rem;width:100%;transition:all .2s;}
+.add-item-btn:hover{background:rgba(255,92,0,.15);}
+
+/* Offer rows */
+.offer-row{display:flex;gap:8px;align-items:center;margin-bottom:10px;}
+.offer-row .form-input{flex:1;}
+.offer-remove{background:none;border:none;color:var(--muted);font-size:1rem;cursor:pointer;padding:6px;border-radius:8px;}
+.offer-remove:hover{color:var(--red);}
+
+/* Launch / QR */
+.slug-row{display:flex;align-items:center;gap:0;border:1.5px solid var(--border);border-radius:var(--r-md);overflow:hidden;}
+.slug-prefix{padding:13px 14px;background:var(--bg3);font-size:.8rem;font-weight:600;color:var(--muted);border-right:1.5px solid var(--border);white-space:nowrap;font-family:'Space Mono',monospace;}
+.slug-input{border:none;padding:13px 14px;font-size:.95rem;color:var(--bk);flex:1;outline:none;}
+.qr-wrap{background:var(--bg3);border-radius:var(--r-lg);padding:24px;display:flex;flex-direction:column;align-items:center;gap:12px;margin:16px 0;}
+#qrCode canvas,#qrCode img{border-radius:10px;}
+.qr-btns{display:flex;gap:10px;}
+.qr-dl-btn{padding:10px 20px;border-radius:100px;font-size:.82rem;font-weight:700;border:1.5px solid var(--border);background:#fff;color:var(--txt);cursor:pointer;transition:all .2s;}
+.qr-dl-btn:hover{border-color:var(--or);color:var(--or);}
+.copy-link-box{display:flex;gap:8px;align-items:center;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r-md);padding:12px 16px;}
+.copy-link-text{font-family:'Space Mono',monospace;font-size:.8rem;color:var(--txt2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.copy-btn{background:var(--or);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:.8rem;font-weight:700;cursor:pointer;}
+
+/* Wiz nav */
+.wiz-nav{display:flex;justify-content:space-between;align-items:center;padding:20px 32px;border-top:1px solid var(--border);}
+.btn-back{background:transparent;color:var(--muted);border:1.5px solid var(--border);padding:11px 22px;border-radius:100px;font-weight:600;font-size:.875rem;cursor:pointer;transition:all .2s;}
+.btn-back:hover{border-color:var(--txt);color:var(--txt);}
+.btn-next{background:var(--or);color:#fff;border:none;padding:12px 26px;border-radius:100px;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(255,92,0,.3);}
+.btn-next:hover{background:var(--or2);transform:translateY(-1px);}
+.btn-preview{background:var(--bg3);color:var(--txt);border:1.5px solid var(--border);padding:11px 20px;border-radius:100px;font-weight:600;font-size:.85rem;cursor:pointer;transition:all .2s;}
+.btn-preview:hover{border-color:var(--or);color:var(--or);}
+
+/* Preview modal */
+#previewModal .modal-box{max-width:440px;background:#f5f5f5;padding:0;overflow:hidden;}
+.preview-phone-shell{
+  width:100%;background:#fff;min-height:600px;
+  position:relative;overflow-y:auto;
+}
+
+/* ══════════════════════════════════════
+   PUBLIC PAGE (preview) STYLES
+══════════════════════════════════════ */
+.pp-cover{height:240px;position:relative;overflow:hidden;}
+.pp-cover-bg{width:100%;height:100%;object-fit:cover;}
+.pp-cover-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.1) 0%,rgba(0,0,0,.8) 100%);}
+.pp-biz-info{position:absolute;bottom:0;left:0;right:0;padding:18px 18px 16px;}
+.pp-name{font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;color:#fff;line-height:1.1;}
+.pp-meta{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap;}
+.pp-rating{font-size:.75rem;color:rgba(255,255,255,.9);display:flex;align-items:center;gap:3px;}
+.pp-city{font-size:.75rem;color:rgba(255,255,255,.75);}
+.pp-status{font-size:.65rem;font-weight:700;padding:3px 9px;border-radius:100px;}
+.pp-status.open{background:#22C55E;color:#fff;}
+.pp-status.closed{background:#EF4444;color:#fff;}
+.pp-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;background:#fff;}
+.pp-btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:14px;border-radius:14px;font-weight:700;font-size:.85rem;border:none;cursor:pointer;transition:all .2s;}
+.pp-btn:hover{filter:brightness(1.06);transform:translateY(-1px);}
+.pp-btn.call{background:#FF5C00;color:#fff;box-shadow:0 4px 12px rgba(255,92,0,.3);}
+.pp-btn.wa{background:#25D366;color:#fff;box-shadow:0 4px 12px rgba(37,211,102,.3);}
+.pp-btn.dir{background:#1A73E8;color:#fff;box-shadow:0 4px 12px rgba(26,115,232,.25);}
+.pp-btn.ord{background:#111;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.25);}
+.pp-sec{padding:16px 14px;background:#fff;border-top:8px solid #f5f4f1;}
+.pp-sec-title{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;color:#111;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.pp-gallery{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px;}
+.pp-gallery::-webkit-scrollbar{display:none;}
+.pp-gimg{width:110px;height:85px;border-radius:12px;object-fit:cover;flex-shrink:0;border:1.5px solid #f0f0f0;}
+.pp-offer{display:flex;align-items:center;gap:10px;padding:11px 14px;background:linear-gradient(135deg,rgba(255,92,0,.08),rgba(255,140,0,.06));border:1px solid rgba(255,92,0,.2);border-radius:12px;font-size:.8rem;color:#111;font-weight:600;margin-bottom:8px;}
+.pp-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f5f5f5;}
+.pp-item:last-child{border-bottom:none;}
+.pp-iimg{width:60px;height:60px;border-radius:12px;object-fit:cover;flex-shrink:0;border:1.5px solid #f0f0f0;}
+.pp-iname{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;color:#111;}
+.pp-idesc{font-size:.73rem;color:#999;margin-top:2px;line-height:1.4;}
+.pp-iprice{font-family:'Space Mono',monospace;font-size:.92rem;font-weight:700;color:#FF5C00;}
+.pp-add-btn{width:30px;height:30px;background:#FF5C00;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;font-weight:700;border:none;cursor:pointer;flex-shrink:0;transition:all .2s;}
+.pp-add-btn:hover{background:#FF7A2E;}
+.pp-plat-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.pp-plat-chip{display:flex;align-items:center;gap:6px;padding:9px 14px;background:#f8f8f8;border:1.5px solid #ebebeb;border-radius:12px;font-size:.78rem;font-weight:600;color:#111;text-decoration:none;transition:all .2s;}
+.pp-plat-chip:hover{border-color:#FF5C00;color:#FF5C00;background:#fff4ee;}
+.pp-footer{padding:14px;text-align:center;font-size:.7rem;color:#bbb;background:#f9f9f7;}
+.pp-footer strong{color:#FF5C00;}
+
+/* ══════════════════════════════════════
+   LOGIN MODAL
+══════════════════════════════════════ */
+.login-body{padding:32px;}
+.login-title{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--bk);margin-bottom:1.5rem;}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width:960px){
+  #hero{flex-direction:column;padding:100px 5% 60px;text-align:center;}
+  .hero-left{max-width:100%;}
+  .hero-sub{max-width:100%;}
+  .hero-trust{justify-content:center;}
+  .hero-btns{justify-content:center;}
+  .hero-right{width:100%;}
+  .phone-float1,.phone-float2{display:none;}
+  .how-grid,.cats-grid{grid-template-columns:1fr 1fr;}
+  .feat-grid,.pricing-grid{grid-template-columns:1fr;}
+  nav ul{display:none;}
+  .form-grid{grid-template-columns:1fr;}
+}
+@media(max-width:580px){
+  .how-grid,.cats-grid{grid-template-columns:1fr;}
+  .new-phone{width:260px;height:500px;}
+}
+
+/* ══════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════ */
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.phone-wrap{animation:float 4s ease-in-out infinite;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.hero-pill{animation:fadeUp .5s ease both;}
+.htitle{animation:fadeUp .6s .1s ease both;}
+.hero-sub{animation:fadeUp .6s .2s ease both;}
+.hero-btns{animation:fadeUp .6s .3s ease both;}
+.hero-trust{animation:fadeUp .6s .4s ease both;}
+
+/* ══════════════════════════════════════
+   ORDER PICKER
+══════════════════════════════════════ */
+.picker-body{padding:24px;}
+.picker-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--bk);margin-bottom:16px;}
+</style>
+<script>if(!window.__QL_SLUG){document.getElementById("_qlHide")?.remove();document.documentElement.style.cssText="";}</script>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════ NAV -->
+<nav id="mainNav">
+  <div class="logo" onclick="scrollTo(0,0)">
+    <span class="ql">Qwik</span><span class="logo-dot"></span><span class="lk">Link</span>
+  </div>
+  <ul>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#categories">Categories</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#how">How It Works</a></li>
+  </ul>
+  <div class="nav-actions">
+    <!-- Auth button — swaps when user logs in -->
+    <div id="navAuthArea" style="display:flex;gap:12px;align-items:center">
+      <button class="btn-nav-login" id="navLoginBtn" onclick="openModal('loginModal')">Login</button>
+      <button class="btn-nav-cta" id="navCtaBtn" onclick="openModal('wizardModal')">Get Started Free →</button>
+    </div>
+    <div id="navUserBtn" style="display:none;align-items:center;gap:10px">
+      <button onclick="openModal('wizardModal')" class="btn-nav-login">Edit My Page</button>
+      <div onclick="toggleUserDash()" style="width:38px;height:38px;border-radius:50%;background:var(--or3);border:2px solid rgba(255,92,0,.2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;overflow:hidden" id="navAvatar">👤</div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════ HERO -->
+<section id="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-left">
+    <div class="hero-pill">⚡ Trusted by 12,000+ Indian businesses</div>
+    <h1 class="htitle">One Smart Link<br>for <span class="or" style="color:var(--or)">Every</span><br>Business.</h1>
+    <p class="hero-sub">QwikLink creates a stunning micro-page for your restaurant, shop, or service in 5 minutes. Photos, menu, offers, map — all in one beautiful link.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="openModal('wizardModal')">Create Free Link →</button>
+      <button class="btn-ghost" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">👁️ See Live Example</button>
+    </div>
+    <div class="hero-trust">
+      <div class="trust-avatars">
+        <img src="https://i.pravatar.cc/50?img=11" alt="u">
+        <img src="https://i.pravatar.cc/50?img=22" alt="u">
+        <img src="https://i.pravatar.cc/50?img=33" alt="u">
+        <img src="https://i.pravatar.cc/50?img=44" alt="u">
+      </div>
+      <div class="trust-txt"><strong>12,000+</strong> businesses already live</div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="phone-wrap">
+      <div class="new-phone">
+        <div class="ph-screen">
+          <div class="ph-cover">
+            <img class="ph-cover-img" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80" alt="cover">
+            <div class="ph-cover-overlay"></div>
+            <div class="ph-rinfo">
+              <div class="ph-rname ph-rname-live">🍕 Pizza Palace</div>
+              <div class="ph-rmeta ph-rmeta-live">⭐ 4.8 · Koramangala &nbsp;<span class="ph-open">🟢 Open</span></div>
+            </div>
+          </div>
+          <div class="ph-actions">
+            <button class="ph-btn call">📞 Call</button>
+            <button class="ph-btn wa">💬 WhatsApp</button>
+            <button class="ph-btn dir">📍 Directions</button>
+            <button class="ph-btn ord">🛒 Order</button>
+          </div>
+          <div class="ph-gallery">
+            <img class="ph-gimg" src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200&q=70" alt="">
+            <img class="ph-gimg" src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&q=70" alt="">
+            <img class="ph-gimg" src="https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=200&q=70" alt="">
+            <img class="ph-gimg" src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=200&q=70" alt="">
+          </div>
+          <div class="ph-section">
+            <div class="ph-stitle">🔥 Today's Offers</div>
+            <div class="ph-offer">🎁 Buy 1 Get 1 on Large Pizzas</div>
+            <div class="ph-offer">🛵 Free delivery above ₹299</div>
+          </div>
+          <div class="ph-section">
+            <div class="ph-stitle">🍽️ Menu</div>
+            <div class="ph-item">
+              <img class="ph-iimg" src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=100&q=70" alt="">
+              <div style="flex:1"><div class="ph-iname">Margherita Pizza</div></div>
+              <div class="ph-iprice">₹299</div>
+            </div>
+            <div class="ph-item">
+              <img class="ph-iimg" src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=100&q=70" alt="">
+              <div style="flex:1"><div class="ph-iname">Chicken Burger</div></div>
+              <div class="ph-iprice">₹199</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-float1">
+        <div class="float-label">LINK VISITS TODAY</div>
+        <div class="float-val float-or">↑ 247 visits</div>
+      </div>
+      <div class="phone-float2">
+        <div class="float-label">NEW ORDER</div>
+        <div class="float-val">📦 Via Swiggy</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ HOW IT WORKS -->
+<section id="how" class="section alt">
+  <div class="sec-label">Simple Process</div>
+  <h2 class="sec-title">Live in under<br>5 minutes.</h2>
+  <p class="sec-sub">No tech skills needed. Fill a form, upload photos, and your premium page is ready to share.</p>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-num">01</div>
+      <h3>Pick your category</h3>
+      <p>Choose from Restaurant, Clothing, Jewellery, Salon, Grocery, Service, and more. Each gets the right ordering platforms.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">02</div>
+      <h3>Fill details & upload photos</h3>
+      <p>Add your business name, phone, location, offers, menu items — and upload beautiful photos of your business and products.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">03</div>
+      <h3>Get your link + QR code</h3>
+      <p>Instantly get a shareable link and downloadable QR code. Share on WhatsApp, Instagram, and print on your menu or store.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ CATEGORIES -->
+<section id="categories" class="section">
+  <div class="sec-label">Business Types</div>
+  <h2 class="sec-title">Built for every<br>Indian business.</h2>
+  <div class="cats-grid">
+    <div class="cat-card" onclick="startWizard('restaurant')">
+      <div class="cat-icon">🍽️</div>
+      <div class="cat-name">Restaurant & Food</div>
+      <div class="cat-desc">Cafes, dhabas, tiffin services</div>
+      <div class="cat-badge"><span class="cat-plat">🟠 Swiggy</span><span class="cat-plat">🔴 Zomato</span><span class="cat-plat">✨ Magicpin</span></div>
+    </div>
+    <div class="cat-card" onclick="startWizard('clothing')">
+      <div class="cat-icon">👗</div>
+      <div class="cat-name">Clothing & Fashion</div>
+      <div class="cat-desc">Boutiques, ethnic, western wear</div>
+      <div class="cat-badge"><span class="cat-plat">🛍️ Meesho</span><span class="cat-plat">📦 Amazon</span><span class="cat-plat">👗 Ajio</span></div>
+    </div>
+    <div class="cat-card" onclick="startWizard('jewellery')">
+      <div class="cat-icon">💍</div>
+      <div class="cat-name">Jewellery</div>
+      <div class="cat-desc">Gold, silver, fashion jewellery</div>
+      <div class="cat-badge"><span class="cat-plat">📦 Amazon</span><span class="cat-plat">💙 Flipkart</span></div>
+    </div>
+    <div class="cat-card" onclick="startWizard('salon')">
+      <div class="cat-icon">✂️</div>
+      <div class="cat-name">Salon & Beauty</div>
+      <div class="cat-desc">Haircut, makeup, spa services</div>
+      <div class="cat-badge"><span class="cat-plat">📞 JustDial</span><span class="cat-plat">📅 Booking</span></div>
+    </div>
+    <div class="cat-card" onclick="startWizard('grocery')">
+      <div class="cat-icon">🛒</div>
+      <div class="cat-name">Grocery & Kirana</div>
+      <div class="cat-desc">Local stores, delivery shops</div>
+      <div class="cat-badge"><span class="cat-plat">⚡ Blinkit</span><span class="cat-plat">🛵 Dunzo</span></div>
+    </div>
+    <div class="cat-card" onclick="startWizard('service')">
+      <div class="cat-icon">🔧</div>
+      <div class="cat-name">Services</div>
+      <div class="cat-desc">Plumber, electrician, AC repair</div>
+      <div class="cat-badge"><span class="cat-plat">📞 JustDial</span><span class="cat-plat">📅 Booking</span></div>
+    </div>
+    <div class="cat-card" onclick="startWizard('other')">
+      <div class="cat-icon">🏪</div>
+      <div class="cat-name">Other Business</div>
+      <div class="cat-desc">Any local business or shop</div>
+      <div class="cat-badge"><span class="cat-plat">💬 WhatsApp</span><span class="cat-plat">🌐 Website</span></div>
+    </div>
+    <div class="cat-card" onclick="openModal('wizardModal')" style="border-style:dashed;background:var(--bg3)">
+      <div class="cat-icon">✨</div>
+      <div class="cat-name">Your Business</div>
+      <div class="cat-desc">Custom setup for any type</div>
+      <div class="cat-badge"><span class="cat-plat">+ Get Started</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ DEMO -->
+<section id="demo" class="section alt">
+  <div style="text-align:center;margin-bottom:1rem;">
+    <div class="sec-label" style="text-align:center">Live Examples</div>
+    <h2 class="sec-title" style="text-align:center">See what your<br>page looks like.</h2>
+    <p class="sec-sub" style="text-align:center;margin:0 auto .5rem">Real QwikLink pages for different business types. Premium, fast, and mobile-first.</p>
+  </div>
+  <div class="demo-phones">
+    <!-- Pizza Palace -->
+    <div class="demo-phone-wrap">
+      <div class="demo-phone">
+        <div class="demo-screen">
+          <div class="ds-cover">
+            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&q=80" alt="">
+            <div class="ds-overlay"></div>
+            <div class="ds-info"><div class="ds-name">🍕 Pizza Palace</div><div class="ds-meta">⭐ 4.8 · Koramangala · <span style="background:#22C55E;color:#fff;padding:1px 6px;border-radius:100px;font-size:.58rem">Open</span></div></div>
+          </div>
+          <div class="ds-actions">
+            <div class="ds-btn c">📞 Call</div><div class="ds-btn w">💬 WhatsApp</div>
+            <div class="ds-btn d">📍 Directions</div><div class="ds-btn o">🛒 Order</div>
+          </div>
+          <div class="ds-gallery">
+            <img class="ds-gimg" src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200&q=70" alt="">
+            <img class="ds-gimg" src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&q=70" alt="">
+            <img class="ds-gimg" src="https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=200&q=70" alt="">
+          </div>
+          <div style="padding:8px 10px;background:#fff;border-top:1px solid #f5f5f5;font-family:Syne,sans-serif;font-size:.68rem;font-weight:800;color:#111">🍽️ Menu</div>
+          <div class="ds-item" style="padding:6px 10px">
+            <img class="ds-iimg" src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=100&q=70" alt="">
+            <div><div class="ds-iname">Margherita Pizza</div><div class="ds-iprice">₹299</div></div>
+          </div>
+          <div class="ds-item" style="padding:6px 10px">
+            <img class="ds-iimg" src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=100&q=70" alt="">
+            <div><div class="ds-iname">Chicken Burger</div><div class="ds-iprice">₹199</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-label">PIZZA PALACE · Restaurant</div>
+    </div>
+
+    <!-- Trendy Threads -->
+    <div class="demo-phone-wrap">
+      <div class="demo-phone">
+        <div class="demo-screen">
+          <div class="ds-cover">
+            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&q=80" alt="">
+            <div class="ds-overlay"></div>
+            <div class="ds-info"><div class="ds-name">👗 Trendy Threads</div><div class="ds-meta">⭐ 4.9 · Indiranagar · <span style="background:#22C55E;color:#fff;padding:1px 6px;border-radius:100px;font-size:.58rem">Open</span></div></div>
+          </div>
+          <div class="ds-actions">
+            <div class="ds-btn c">📞 Call</div><div class="ds-btn w">💬 WhatsApp</div>
+            <div class="ds-btn d">📍 Directions</div><div class="ds-btn o">🛒 Shop</div>
+          </div>
+          <div class="ds-gallery">
+            <img class="ds-gimg" src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=200&q=70" alt="">
+            <img class="ds-gimg" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&q=70" alt="">
+            <img class="ds-gimg" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=200&q=70" alt="">
+          </div>
+          <div style="padding:8px 10px;background:#fff;border-top:1px solid #f5f5f5;font-family:Syne,sans-serif;font-size:.68rem;font-weight:800;color:#111">🛍️ Shop On</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;padding:6px 10px 10px">
+            <span style="background:#f8f8f8;border:1px solid #ebebeb;padding:5px 10px;border-radius:8px;font-size:.6rem;font-weight:700">🛍️ Meesho</span>
+            <span style="background:#f8f8f8;border:1px solid #ebebeb;padding:5px 10px;border-radius:8px;font-size:.6rem;font-weight:700">📦 Amazon</span>
+            <span style="background:#f8f8f8;border:1px solid #ebebeb;padding:5px 10px;border-radius:8px;font-size:.6rem;font-weight:700">👗 Ajio</span>
+          </div>
+        </div>
+      </div>
+      <div class="demo-label">TRENDY THREADS · Clothing</div>
+    </div>
+
+    <!-- Shree Jewellers -->
+    <div class="demo-phone-wrap">
+      <div class="demo-phone">
+        <div class="demo-screen">
+          <div class="ds-cover">
+            <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=500&q=80" alt="">
+            <div class="ds-overlay"></div>
+            <div class="ds-info"><div class="ds-name">💍 Shree Jewellers</div><div class="ds-meta">⭐ 4.9 · Chickpet · <span style="background:#22C55E;color:#fff;padding:1px 6px;border-radius:100px;font-size:.58rem">Open</span></div></div>
+          </div>
+          <div class="ds-actions">
+            <div class="ds-btn c">📞 Call</div><div class="ds-btn w">💬 WhatsApp</div>
+            <div class="ds-btn d">📍 Directions</div><div class="ds-btn o">🛒 Shop</div>
+          </div>
+          <div class="ds-gallery">
+            <img class="ds-gimg" src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=200&q=70" alt="">
+            <img class="ds-gimg" src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=200&q=70" alt="">
+            <img class="ds-gimg" src="https://images.unsplash.com/photo-1573408301185-9519f94816b5?w=200&q=70" alt="">
+          </div>
+          <div style="padding:8px 10px;background:#fff;border-top:1px solid #f5f5f5;font-family:Syne,sans-serif;font-size:.68rem;font-weight:800;color:#111">💎 Collections</div>
+          <div class="ds-item" style="padding:6px 10px">
+            <img class="ds-iimg" src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=100&q=70" alt="">
+            <div><div class="ds-iname">Gold Necklace Set</div><div class="ds-iprice">₹45,000</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-label">SHREE JEWELLERS · Jewellery</div>
+    </div>
+
+    <!-- Style Studio -->
+    <div class="demo-phone-wrap">
+      <div class="demo-phone">
+        <div class="demo-screen">
+          <div class="ds-cover">
+            <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=500&q=80" alt="">
+            <div class="ds-overlay"></div>
+            <div class="ds-info"><div class="ds-name">✂️ Style Studio</div><div class="ds-meta">⭐ 4.7 · Koramangala · <span style="background:#22C55E;color:#fff;padding:1px 6px;border-radius:100px;font-size:.58rem">Open</span></div></div>
+          </div>
+          <div class="ds-actions">
+            <div class="ds-btn c">📞 Call</div><div class="ds-btn w">💬 WhatsApp</div>
+            <div class="ds-btn d">📍 Directions</div><div class="ds-btn o">📅 Book</div>
+          </div>
+          <div class="ds-gallery">
+            <img class="ds-gimg" src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=200&q=70" alt="">
+            <img class="ds-gimg" src="https://images.unsplash.com/photo-1562322140-8baeececf3df?w=200&q=70" alt="">
+          </div>
+          <div style="padding:8px 10px;background:#fff;border-top:1px solid #f5f5f5;font-family:Syne,sans-serif;font-size:.68rem;font-weight:800;color:#111">✂️ Services</div>
+          <div class="ds-item" style="padding:6px 10px">
+            <div style="width:34px;height:34px;border-radius:7px;background:#fff4ee;display:flex;align-items:center;justify-content:center;flex-shrink:0">✂️</div>
+            <div><div class="ds-iname">Haircut & Styling</div><div class="ds-iprice">₹499</div></div>
+          </div>
+          <div class="ds-item" style="padding:6px 10px">
+            <div style="width:34px;height:34px;border-radius:7px;background:#fff4ee;display:flex;align-items:center;justify-content:center;flex-shrink:0">💅</div>
+            <div><div class="ds-iname">Manicure & Pedicure</div><div class="ds-iprice">₹799</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-label">STYLE STUDIO · Salon</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ FEATURES -->
+<section id="features" class="section">
+  <div class="sec-label">Features</div>
+  <h2 class="sec-title">Everything your<br>customers need.</h2>
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon">⚡</div>
+      <h3>Loads in &lt; 1.5 seconds</h3>
+      <p>Optimized for low-end Android phones on slow 4G. Your customers won't wait.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">📸</div>
+      <h3>Photo-rich gallery</h3>
+      <p>Upload your business photos and product images. Every item gets its own photo — like Swiggy/Zomato.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">📞</div>
+      <h3>One-tap actions</h3>
+      <p>Call, WhatsApp, Get Directions, Order — all above the fold. Customer acts within 10 seconds of landing.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🛒</div>
+      <h3>Multi-platform ordering</h3>
+      <p>Swiggy + Zomato for restaurants. Meesho + Amazon for clothing. JustDial + Booking for services.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🔥</div>
+      <h3>Offers & promotions</h3>
+      <p>Highlight today's deals and discounts prominently. Update anytime — no developer needed.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">📊</div>
+      <h3>QR code + analytics</h3>
+      <p>Download your QR code in PNG or SVG. Track visits, clicks, and calls from your dashboard.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ PRICING -->
+<section id="pricing" class="section alt">
+  <div class="sec-label">Pricing</div>
+  <h2 class="sec-title">Simple pricing.<br>Real results.</h2>
+  <p class="sec-sub">Start free. Upgrade when your business is ready to grow.</p>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-plan">FREE</div>
+      <div class="price-amount">₹0 <span class="price-period">/ forever</span></div>
+      <div class="price-desc">Everything you need to get started.</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li>1 QwikLink page</li>
+        <li>Upload business photos</li>
+        <li>Call + WhatsApp (your real number)</li>
+        <li>Menu / products (up to 5)</li>
+        <li>QR code download</li>
+        <li>qwiklink.com/yourname</li>
+      </ul>
+      <button class="price-cta outline" onclick="openModal('wizardModal')">Get Started Free</button>
+    </div>
+    <div class="price-card popular">
+      <div class="popular-badge">MOST POPULAR</div>
+      <div class="price-plan">GROW</div>
+      <div class="price-amount">₹499 <span class="price-period">/ mo</span></div>
+      <div class="price-desc">For businesses ready to scale.</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li>Everything in Free</li>
+        <li>Up to 10 menu / product items</li>
+        <li>Gallery up to 10 photos</li>
+        <li>Multi-platform ordering</li>
+        <li>Google Maps embed</li>
+        <li>Analytics dashboard</li>
+        <li>Remove "Powered by QwikLink"</li>
+      </ul>
+      <button class="price-cta solid" onclick="openModal('wizardModal')">Start Growing →</button>
+    </div>
+    <div class="price-card">
+      <div class="price-plan">PRO</div>
+      <div class="price-amount">₹999 <span class="price-period">/ mo</span></div>
+      <div class="price-desc">For power users and agencies.</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li>Everything in Grow</li>
+        <li>Unlimited menu items + photos</li>
+        <li>Instagram auto-DM replies</li>
+        <li>Custom domain support</li>
+        <li>Priority support</li>
+        <li>Multiple business pages</li>
+        <li>Early access to new features</li>
+      </ul>
+      <button class="price-cta outline" onclick="openModal('wizardModal')">Go Pro</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo"><span class="ql">Qwik</span><span class="dot"></span><span class="lk">Link</span></div>
+      <div class="footer-tagline">One Link. Every Customer.</div>
+    </div>
+    <div class="footer-links">
+      <h4>Product</h4>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#demo">Examples</a>
+    </div>
+    <div class="footer-links">
+      <h4>Company</h4>
+      <a href="#">About</a>
+      <a href="#">Blog</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-links">
+      <h4>Legal</h4>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>Made with ❤️ for Indian businesses</div>
+    <div>© 2025 QwikLink. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════ WIZARD MODAL -->
+<div class="modal-overlay" id="wizardModal">
+  <div class="modal-box" style="max-width:720px;">
+    <button class="modal-close" onclick="closeModal('wizardModal')">✕</button>
+    <div class="wiz-head">
+      <div class="wiz-title">Create Your QwikLink ⚡</div>
+      <div class="wiz-sub">Fill your details and get a premium page in minutes — completely free.</div>
+      <div class="wiz-progress">
+        <div class="prog-item active" id="prog0"><div class="prog-circle">1</div><div class="prog-label">Info</div></div>
+        <div class="prog-item" id="prog1"><div class="prog-circle">2</div><div class="prog-label">Contact</div></div>
+        <div class="prog-item" id="prog2"><div class="prog-circle">3</div><div class="prog-label">Photos</div></div>
+        <div class="prog-item" id="prog3"><div class="prog-circle">4</div><div class="prog-label">Offers</div></div>
+        <div class="prog-item" id="prog4"><div class="prog-circle">5</div><div class="prog-label">Launch</div></div>
+      </div>
+    </div>
+
+    <!-- STEP 0: Basic Info -->
+    <div class="wiz-body">
+      <div class="wizard-step active" id="step0">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Business Name *</label>
+            <input class="form-input" id="bizName" placeholder="e.g. Pizza Palace" oninput="liveUpdatePreview()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Business Type *</label>
+            <select class="form-input form-select" id="bizType" onchange="updatePlatformOptions()">
+              <option value="">Select type...</option>
+              <option value="restaurant">🍽️ Restaurant / Food</option>
+              <option value="clothing">👗 Clothing / Fashion</option>
+              <option value="jewellery">💍 Jewellery</option>
+              <option value="salon">✂️ Salon / Beauty</option>
+              <option value="grocery">🛒 Grocery / Kirana</option>
+              <option value="service">🔧 Service / Repair</option>
+              <option value="other">🏪 Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tagline</label>
+            <input class="form-input" id="bizTagline" placeholder="e.g. Best pizza in Bangalore">
+          </div>
+          <div class="form-group">
+            <label class="form-label">City</label>
+            <input class="form-input" id="bizCity" placeholder="e.g. Bangalore" oninput="liveUpdatePreview()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Rating (out of 5)</label>
+            <input class="form-input" id="bizRating" placeholder="e.g. 4.8" type="number" min="0" max="5" step="0.1">
+          </div>
+          <div class="form-group">
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Business is Open</div>
+                <div style="font-size:.78rem;color:var(--muted)">Customers will see Open / Closed status</div>
+              </div>
+              <button class="toggle-sw on" id="openToggle" onclick="this.classList.toggle('on')"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 1: Contact & Platforms -->
+      <div class="wizard-step" id="step1">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Phone Number *</label>
+            <input class="form-input" id="bizPhone" placeholder="10-digit mobile" type="tel" maxlength="10">
+          </div>
+          <div class="form-group">
+            <label class="form-label">WhatsApp Number</label>
+            <input class="form-input" id="bizWhatsapp" placeholder="If different from phone">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Google Maps Link</label>
+            <input class="form-input" id="bizMaps" placeholder="https://maps.google.com/...">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Full Address</label>
+            <input class="form-input" id="bizAddress" placeholder="Shop address for customers">
+          </div>
+        </div>
+        <div style="margin-top:8px">
+          <div class="form-label">Ordering / Booking Platforms</div>
+          <div style="font-size:.8rem;color:var(--muted);margin-bottom:10px">Select platforms you use — customers will see buttons to order on them</div>
+          <div class="plat-chips" id="wizPlatformChips"></div>
+          <div class="plat-inputs" id="wizPlatformInputs"></div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Photos -->
+      <div class="wizard-step" id="step2">
+        <div style="margin-bottom:20px">
+          <div class="form-label">Cover / Hero Photo</div>
+          <div style="font-size:.8rem;color:var(--muted);margin-bottom:10px">Main photo shown at the top of your page — use your best shot</div>
+          <div id="coverZone">
+            <div class="upload-zone" onclick="document.getElementById('coverFileInput').click()">
+              <input type="file" id="coverFileInput" accept="image/*" style="display:none" onchange="handleCoverUpload(this)">
+              <div class="upload-icon">🖼️</div>
+              <div class="upload-text">Click to upload cover photo</div>
+              <div class="upload-hint">JPG, PNG or WEBP · Recommended 1200×600px</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="form-label">Gallery Photos (up to 10)</div>
+          <div style="font-size:.8rem;color:var(--muted);margin-bottom:10px">Photos of your shop, food, products — shown in a swipeable gallery</div>
+          <div class="gallery-grid" id="galleryGrid">
+            <div class="gallery-add-btn" id="galleryAddBtn">
+              <input type="file" accept="image/*" multiple onchange="handleGalleryUpload(this)">
+              <span style="font-size:1.4rem">+</span>
+              <span>Add Photos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Offers & Menu -->
+      <div class="wizard-step" id="step3">
+        <div style="margin-bottom:20px">
+          <div class="form-label">Today's Offers (optional)</div>
+          <div style="font-size:.8rem;color:var(--muted);margin-bottom:12px">Add deals or discounts you want to highlight</div>
+          <div id="offersContainer">
+            <div class="offer-row">
+              <input class="form-input" placeholder="e.g. Buy 1 Get 1 on Large Pizzas">
+              <button class="offer-remove" onclick="this.parentElement.remove()">✕</button>
+            </div>
+          </div>
+          <button class="add-item-btn" onclick="addOffer()" style="width:auto;padding:8px 18px;font-size:.8rem">+ Add Offer</button>
+        </div>
+        <div>
+          <div class="form-label" id="productsLabel">Menu / Products (up to 10)</div>
+          <div style="font-size:.8rem;color:var(--muted);margin-bottom:12px">Each item gets a photo, name, description and price</div>
+          <div id="productsContainer"></div>
+          <button class="add-item-btn" onclick="addProduct()">+ Add Item with Photo</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Launch -->
+      <div class="wizard-step" id="step4">
+        <div style="margin-bottom:20px">
+          <div class="form-label">Your Custom Link</div>
+          <div class="slug-row">
+            <div class="slug-prefix">qwiklink.com/</div>
+            <input class="slug-input" id="bizSlug" placeholder="yourname" oninput="updateQRCode()">
+          </div>
+        </div>
+        <div class="qr-wrap">
+          <div id="qrCode"></div>
+          <div style="font-size:.78rem;color:var(--muted);font-family:'Space Mono',monospace;">Scan to preview your page</div>
+          <div class="qr-btns">
+            <button class="qr-dl-btn" onclick="downloadQR('png')">⬇ Download PNG</button>
+            <button class="qr-dl-btn" onclick="downloadQR('svg')">⬇ Download SVG</button>
+          </div>
+        </div>
+        <div style="margin-bottom:16px">
+          <div class="form-label">Your Link</div>
+          <div class="copy-link-box">
+            <div class="copy-link-text" id="slugDisplay">qwiklink-app.netlify.app/?slug=yourname</div>
+            <button class="copy-btn" onclick="copyLink()">Copy</button>
+          </div>
+        </div>
+        <button class="btn-next" style="width:100%;font-size:1rem;padding:16px" onclick="launchPage()">🚀 Preview My Page</button>
+      </div>
+    </div>
+
+    <div class="wiz-nav" id="wizNav">
+      <button class="btn-back" id="backBtn" onclick="prevStep(currentStep)" style="visibility:hidden">← Back</button>
+      <div style="display:flex;gap:10px">
+        <button class="btn-preview" onclick="openPreview()" title="Preview your page">👁 Preview</button>
+        <button class="btn-next" id="nextBtn" onclick="nextStep(currentStep)">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ AUTH MODAL -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal-box" style="max-width:440px;">
+    <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+    <div class="login-body">
+
+      <!-- Auth Tabs -->
+      <div style="display:flex;background:var(--bg3);border-radius:12px;padding:4px;gap:4px;margin-bottom:24px">
+        <button id="tabLoginBtn" onclick="switchAuthTab('login')" style="flex:1;padding:10px;border-radius:9px;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:.875rem;cursor:pointer;background:#fff;color:var(--or);box-shadow:var(--shadow-sm);transition:all .2s">Login</button>
+        <button id="tabSignupBtn" onclick="switchAuthTab('signup')" style="flex:1;padding:10px;border-radius:9px;border:none;font-family:'Syne',sans-serif;font-weight:700;font-size:.875rem;cursor:pointer;background:transparent;color:var(--muted);transition:all .2s">Sign Up</button>
+      </div>
+
+      <!-- Firebase config notice -->
+      <div id="fbConfigNotice" style="background:#fff8f0;border:1px solid rgba(255,92,0,.25);border-radius:12px;padding:12px 14px;margin-bottom:18px;font-size:.8rem;color:#333;line-height:1.6;display:none">
+        ⚠️ <strong>Firebase not configured.</strong> Add your config in the JS section to enable real auth. <a href="#" onclick="showFirebaseSetup()" style="color:var(--or);font-weight:700">View setup guide →</a>
+      </div>
+
+      <!-- Google Sign In -->
+      <button onclick="signInWithGoogle()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px;border:1.5px solid var(--border);border-radius:12px;background:#fff;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .2s;margin-bottom:16px" onmouseover="this.style.borderColor='#4285F4'" onmouseout="this.style.borderColor='var(--border)'">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.2l6.8-6.8C35.8 2.3 30.2 0 24 0 14.7 0 6.7 5.4 2.9 13.3l7.9 6.1C12.5 13.3 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.9 7.2l7.6 5.9c4.4-4.1 7.1-10.2 7.1-17.1z"/><path fill="#FBBC05" d="M10.8 28.6A14.9 14.9 0 0 1 9.5 24c0-1.6.3-3.2.8-4.6L2.4 13.3A23.9 23.9 0 0 0 0 24c0 3.8.9 7.4 2.5 10.6l8.3-6z"/><path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.4l-7.6-5.9c-2 1.4-4.7 2.2-7.6 2.2-6.2 0-11.5-3.8-13.2-9.3l-8.3 6C6.7 42.6 14.7 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+        <span style="font-size:.75rem;color:var(--muted);font-weight:600">OR</span>
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+      </div>
+
+      <!-- Login Form -->
+      <div id="loginForm">
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" id="li_email" type="email" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" id="li_pass" type="password" placeholder="Your password">
+        </div>
+        <div style="text-align:right;margin-bottom:14px">
+          <a href="#" onclick="forgotPassword()" style="font-size:.8rem;color:var(--or);font-weight:600">Forgot password?</a>
+        </div>
+        <button onclick="doEmailLogin()" id="loginBtn" style="width:100%;padding:14px;background:var(--or);color:#fff;border:none;border-radius:100px;font-weight:700;font-size:.95rem;cursor:pointer;transition:all .2s">Login →</button>
+        <div style="text-align:center;margin-top:16px;font-size:.85rem;color:var(--muted)">No account? <a href="#" onclick="switchAuthTab('signup')" style="color:var(--or);font-weight:700">Sign up free →</a></div>
+      </div>
+
+      <!-- Signup Form -->
+      <div id="signupForm" style="display:none">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input class="form-input" id="su_name" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" id="su_email" type="email" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" id="su_pass" type="password" placeholder="Min 8 characters">
+        </div>
+        <button onclick="doEmailSignup()" id="signupBtn" style="width:100%;padding:14px;background:var(--or);color:#fff;border:none;border-radius:100px;font-weight:700;font-size:.95rem;cursor:pointer;transition:all .2s">Create Account →</button>
+        <div style="text-align:center;margin-top:16px;font-size:.8rem;color:var(--muted)">By signing up you agree to our <a href="#" style="color:var(--or)">Terms & Privacy</a></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Firebase Setup Guide Modal -->
+<div class="modal-overlay" id="fbSetupModal">
+  <div class="modal-box" style="max-width:600px;">
+    <button class="modal-close" onclick="closeModal('fbSetupModal')">✕</button>
+    <div style="padding:32px">
+      <div style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:6px">Firebase Setup Guide 🔥</div>
+      <div style="font-size:.875rem;color:var(--muted);margin-bottom:24px">Follow these steps once to enable real authentication</div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="background:var(--bg3);border-radius:14px;padding:18px">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;margin-bottom:8px">Step 1 — Create Firebase Project</div>
+          <div style="font-size:.85rem;color:var(--txt2);line-height:1.7">1. Go to <a href="https://console.firebase.google.com" target="_blank" style="color:var(--or);font-weight:600">console.firebase.google.com</a><br>2. Click <strong>Add Project</strong> → name it "QwikLink"<br>3. Disable Google Analytics (optional) → Create project</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:14px;padding:18px">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;margin-bottom:8px">Step 2 — Enable Authentication</div>
+          <div style="font-size:.85rem;color:var(--txt2);line-height:1.7">1. In Firebase console → <strong>Authentication</strong> → Get Started<br>2. Enable <strong>Email/Password</strong> provider<br>3. Enable <strong>Google</strong> provider → set support email</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:14px;padding:18px">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;margin-bottom:8px">Step 3 — Get Your Config</div>
+          <div style="font-size:.85rem;color:var(--txt2);line-height:1.7">1. Project Settings (⚙️) → General<br>2. Scroll to <strong>Your apps</strong> → Add web app<br>3. Copy the <code style="background:#e8e8e8;padding:1px 6px;border-radius:4px">firebaseConfig</code> object</div>
+        </div>
+        <div style="background:#0D0D0D;border-radius:14px;padding:18px">
+          <div style="font-family:'Space Mono',monospace;font-size:.75rem;color:#888;margin-bottom:8px">// Paste into this file — replace YOUR_... values:</div>
+          <div style="font-family:'Space Mono',monospace;font-size:.75rem;color:#4ade80;line-height:1.8">const FIREBASE_CONFIG = {<br>&nbsp;&nbsp;apiKey: "YOUR_API_KEY",<br>&nbsp;&nbsp;authDomain: "YOUR_PROJECT.firebaseapp.com",<br>&nbsp;&nbsp;projectId: "YOUR_PROJECT_ID",<br>&nbsp;&nbsp;storageBucket: "YOUR_PROJECT.appspot.com",<br>&nbsp;&nbsp;messagingSenderId: "YOUR_SENDER_ID",<br>&nbsp;&nbsp;appId: "YOUR_APP_ID"<br>};</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:14px;padding:18px">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;margin-bottom:8px">Step 4 — Firestore Database (optional)</div>
+          <div style="font-size:.85rem;color:var(--txt2);line-height:1.7">To save business page data:<br>1. Firestore Database → Create database → Start in test mode<br>2. Business data auto-saves when user completes wizard</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- User Dashboard Overlay (shown when logged in) -->
+<div id="userDashOverlay" style="display:none;position:fixed;top:70px;right:24px;z-index:800;background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:20px;width:300px;box-shadow:var(--shadow-xl)">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+    <div id="userAvatarSmall" style="width:44px;height:44px;border-radius:50%;background:var(--or3);border:2px solid rgba(255,92,0,.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;overflow:hidden;flex-shrink:0"></div>
+    <div>
+      <div id="dashUserName" style="font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;color:var(--bk)"></div>
+      <div id="dashUserEmail" style="font-size:.75rem;color:var(--muted)"></div>
+    </div>
+  </div>
+  <div style="border-top:1px solid var(--border);padding-top:14px;display:flex;flex-direction:column;gap:8px">
+    <button onclick="openModal('wizardModal');toggleUserDash()" style="width:100%;padding:11px;background:var(--or3);border:1px solid rgba(255,92,0,.2);border-radius:10px;font-weight:700;font-size:.85rem;color:var(--or);cursor:pointer">✏️ Edit My Page</button>
+    <button onclick="openAnalytics();toggleUserDash()" style="width:100%;padding:11px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;font-weight:700;font-size:.85rem;color:var(--txt);cursor:pointer">📊 My Links & Analytics</button>
+    <button onclick="openModal('previewModal');openPreview();toggleUserDash()" style="width:100%;padding:11px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;font-weight:600;font-size:.85rem;color:var(--txt);cursor:pointer">👁️ Preview My Page</button>
+    <button onclick="signOut()" style="width:100%;padding:11px;background:transparent;border:1px solid var(--border);border-radius:10px;font-weight:600;font-size:.85rem;color:var(--muted);cursor:pointer">Sign Out</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ PREVIEW MODAL -->
+<div class="modal-overlay" id="previewModal">
+  <div class="modal-box" style="max-width:400px;padding:0;overflow:hidden;background:#f5f4f1;">
+    <button class="modal-close" onclick="closeModal('previewModal')" style="top:12px;right:12px;z-index:20;background:rgba(255,255,255,.9)">✕</button>
+    <div id="previewContent" style="background:#fff;min-height:500px;overflow-y:auto;max-height:90vh;border-radius:var(--r-xl);"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ ORDER PICKER MODAL -->
+<div class="modal-overlay" id="orderPickerModal">
+  <div class="modal-box" style="max-width:380px;">
+    <button class="modal-close" onclick="closeModal('orderPickerModal')">✕</button>
+    <div class="picker-body">
+      <div class="picker-title">Choose a platform 🛒</div>
+      <div id="orderPickerList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════
+   PUBLIC PAGE ROUTER
+════════════════════════════════ */
+const __slug = window.__QL_SLUG || new URLSearchParams(window.location.search).get('slug');
+if(__slug){
+  // Remove the body hide style immediately
+  document.getElementById('_qlHide')?.remove();
+  window.addEventListener('DOMContentLoaded', async () => {
+    document.documentElement.style.cssText = '';
+    document.body.innerHTML = `
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap');
+        *{margin:0;padding:0;box-sizing:border-box} ::-webkit-scrollbar{width:0}
+        @keyframes spin{to{transform:rotate(360deg)}}
+      </style>
+      <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#fff">
+        <div style="text-align:center">
+          <div style="font-size:2.5rem;margin-bottom:12px">⚡</div>
+          <div style="font-weight:800;font-size:1.1rem;color:#0D0D0D;font-family:'Syne',sans-serif">QwikLink</div>
+          <div style="font-size:.85rem;color:#aaa;margin-top:6px">Loading your page...</div>
+        </div>
+      </div>`;
+
+    let pageData = null;
+
+    // METHOD 1: localStorage (instant, same device, <50ms)
+    try{
+      const l = localStorage.getItem('ql_page_' + __slug);
+      if(l){ 
+        pageData = JSON.parse(l);
+        console.log('✅ Loaded from localStorage instantly');
+      }
+    }catch(e){}
+
+    if(pageData){
+      renderPublicPage(pageData);
+      return;
+    }
+
+    // METHOD 2: Firestore REST API - pure HTTP, no SDK, no cold start
+    try{
+      const PROJECT = 'qwiklink-4a1e7';
+      const url = `https://firestore.googleapis.com/v1/projects/${PROJECT}/databases/(default)/documents/pages/${__slug}`;
+      console.log('Fetching from Firestore REST:', url);
+      const res = await fetch(url);
+      if(res.ok){
+        const doc = await res.json();
+        if(doc.fields){
+          const parse = (v) => {
+            if(v.stringValue !== undefined) return v.stringValue;
+            if(v.booleanValue !== undefined) return v.booleanValue;
+            if(v.integerValue !== undefined) return parseInt(v.integerValue);
+            if(v.doubleValue !== undefined) return v.doubleValue;
+            if(v.nullValue !== undefined) return null;
+            if(v.arrayValue) return (v.arrayValue.values||[]).map(parse);
+            if(v.mapValue){ const o={}; for(const[k,val] of Object.entries(v.mapValue.fields||{})) o[k]=parse(val); return o; }
+            return null;
+          };
+          pageData = {};
+          for(const [k,v] of Object.entries(doc.fields)) pageData[k] = parse(v);
+          localStorage.setItem('ql_page_' + __slug, JSON.stringify(pageData));
+          console.log('✅ Loaded from Firestore REST API!');
+        }
+      } else {
+        console.log('Firestore REST response:', res.status);
+      }
+    }catch(e){ console.error('Firestore REST error:', e.message); }
+
+    if(!pageData){
+      document.documentElement.style.cssText='';
+    document.body.innerHTML = `
+        <style>@import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&family=DM+Sans&display=swap');*{margin:0;padding:0;box-sizing:border-box}</style>
+        <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#fff;font-family:'DM Sans',sans-serif;padding:32px">
+          <div style="font-size:4rem">🔍</div>
+          <div style="font-size:1.3rem;font-weight:800;color:#0D0D0D;font-family:'Syne',sans-serif">Page not found</div>
+          <div style="font-size:.9rem;color:#888;text-align:center">No business page for <strong style="color:#FF5C00">${__slug}</strong></div>
+          <a href="/" style="padding:14px 32px;background:#FF5C00;color:#fff;border-radius:100px;text-decoration:none;font-weight:700;font-size:.9rem">Create your page →</a>
+        </div>`;
+    }
+  });
+}
+
+
+
+/* ════════════════════════════════════════════════════════
+   FIREBASE CONFIG
+   ► Replace with your actual values from Firebase Console
+   ► console.firebase.google.com → Project Settings → Web app
+════════════════════════════════════════════════════════ */
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyAi70rAC3L761A_ZpgahkbHTUx26_MUAj0",
+  authDomain:        "qwiklink-4a1e7.firebaseapp.com",
+  projectId:         "qwiklink-4a1e7",
+  storageBucket:     "qwiklink-4a1e7.firebasestorage.app",
+  messagingSenderId: "736764095756",
+  appId:             "1:736764095756:web:7165ae7d027c4c60442d29",
+  measurementId:     "G-KKBD3NR6W6"
+};
+
+
+/* ════════════════════════════════
+   CLOUDINARY IMAGE UPLOAD
+   Cloud: djobkiewz | Preset: qwiklink
+════════════════════════════════ */
+const CLOUDINARY_CLOUD = 'djobkiewz';
+const CLOUDINARY_PRESET = 'qwiklink';
+const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`;
+
+async function uploadToCloudinary(base64Data, folder='qwiklink'){
+  if(!base64Data || !base64Data.startsWith('data:')) return null;
+  try{
+    const formData = new FormData();
+    formData.append('file', base64Data);
+    formData.append('upload_preset', CLOUDINARY_PRESET);
+    formData.append('folder', folder);
+    const res = await fetch(CLOUDINARY_URL, { method:'POST', body:formData });
+    const data = await res.json();
+    if(data.secure_url){
+      console.log('✅ Cloudinary upload success:', data.secure_url);
+      return data.secure_url;
+    }
+    console.error('Cloudinary error:', data);
+    return null;
+  } catch(e){
+    console.error('Cloudinary upload failed:', e);
+    return null;
+  }
+}
+
+async function uploadAllPhotos(pageData){
+  showToast('📸 Uploading photos to cloud...', 'info', 10000);
+  
+  // Upload cover photo
+  if(pageData.coverPhoto && pageData.coverPhoto.startsWith('data:')){
+    const url = await uploadToCloudinary(pageData.coverPhoto, 'qwiklink/covers');
+    if(url) pageData.coverPhoto = url;
+  }
+  
+  // Upload gallery photos
+  if(pageData.gallery && pageData.gallery.length){
+    const uploaded = [];
+    for(const photo of pageData.gallery){
+      if(photo && photo.startsWith('data:')){
+        const url = await uploadToCloudinary(photo, 'qwiklink/gallery');
+        uploaded.push(url || photo);
+      } else {
+        uploaded.push(photo);
+      }
+    }
+    pageData.gallery = uploaded;
+  }
+  
+  // Upload menu item photos
+  if(pageData.menu && pageData.menu.length){
+    for(let i=0; i<pageData.menu.length; i++){
+      const item = pageData.menu[i];
+      if(item.photo && item.photo.startsWith('data:')){
+        const url = await uploadToCloudinary(item.photo, 'qwiklink/menu');
+        if(url) pageData.menu[i].photo = url;
+      }
+    }
+  }
+  
+  showToast('✅ Photos uploaded!', 'ok');
+  return pageData;
+}
+
+/* ════════════════════════════════
+   FIREBASE INIT
+════════════════════════════════ */
+let FB_READY = false;
+let fbAuth   = null;
+let fbDb     = null;
+
+(function initFirebase(){
+  if(FIREBASE_CONFIG.apiKey === 'YOUR_API_KEY'){
+    console.warn('⚠️ QwikLink: Firebase not configured. Using localStorage fallback.');
+    // config notice shown
+    document.getElementById('fbConfigNotice').style.display = 'block';
+    return;
+  }
+  try {
+    firebase.initializeApp(FIREBASE_CONFIG);
+    fbAuth   = firebase.auth();
+    fbDb     = firebase.firestore();
+    FB_READY = true; window.FB_READY = true; window.fbDb = fbDb;
+    try { firebase.analytics(); } catch(ae){ console.log('Analytics not available'); }
+    console.log('🔥 Firebase connected');
+
+    // Auth state observer — fires on every page load
+    fbAuth.onAuthStateChanged(user => {
+      if(user){
+        currentUser = {
+          uid:         user.uid,
+          name:        user.displayName || user.email.split('@')[0],
+          email:       user.email,
+          photoURL:    user.photoURL || null
+        };
+        onUserLoggedIn(currentUser);
+      } else {
+        currentUser = null;
+        onUserLoggedOut();
+      }
+    }, err => {
+      console.error('Auth observer error:', err.code, err.message);
+    });
+  } catch(e){
+    console.error('Firebase init error:', e);
+  }
+})();
+
+/* ════════════════════════════════
+   CURRENT USER STATE
+════════════════════════════════ */
+let currentUser = null;
+
+function onUserLoggedIn(user){
+  // Update navbar
+  document.getElementById('navAuthArea').style.display = 'none';
+  document.getElementById('navUserBtn').style.display  = 'flex';
+  const avatar = document.getElementById('navAvatar');
+  if(user.photoURL){
+    avatar.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+  } else {
+    avatar.textContent = user.name.charAt(0).toUpperCase();
+    avatar.style.background = 'var(--or)';
+    avatar.style.color = '#fff';
+    avatar.style.fontSize = '1rem';
+    avatar.style.fontWeight = '800';
+    avatar.style.fontFamily = 'Syne,sans-serif';
+  }
+
+  // Update dashboard overlay
+  document.getElementById('dashUserName').textContent  = user.name;
+  document.getElementById('dashUserEmail').textContent = user.email;
+  const avSmall = document.getElementById('userAvatarSmall');
+  if(user.photoURL){
+    avSmall.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover">`;
+  } else {
+    avSmall.textContent = user.name.charAt(0).toUpperCase();
+    avSmall.style.background = 'var(--or)';
+    avSmall.style.color = '#fff';
+    avSmall.style.fontFamily = 'Syne,sans-serif';
+    avSmall.style.fontWeight = '800';
+  }
+
+  // Close auth modal if open
+  closeModal('loginModal');
+  showToast(`Welcome back, ${user.name.split(' ')[0]}! 👋`);
+}
+
+function onUserLoggedOut(){
+  document.getElementById('navAuthArea').style.display = 'flex';
+  document.getElementById('navUserBtn').style.display  = 'none';
+  document.getElementById('userDashOverlay').style.display = 'none';
+}
+
+/* ════════════════════════════════
+   AUTH UI HELPERS
+════════════════════════════════ */
+function switchAuthTab(tab){
+  const isLogin = tab === 'login';
+  document.getElementById('loginForm').style.display  = isLogin ? 'block' : 'none';
+  document.getElementById('signupForm').style.display = isLogin ? 'none'  : 'block';
+  const loginBtn  = document.getElementById('tabLoginBtn');
+  const signupBtn = document.getElementById('tabSignupBtn');
+  loginBtn.style.background  = isLogin ? '#fff'        : 'transparent';
+  loginBtn.style.color       = isLogin ? 'var(--or)'   : 'var(--muted)';
+  loginBtn.style.boxShadow   = isLogin ? 'var(--shadow-sm)' : 'none';
+  signupBtn.style.background = isLogin ? 'transparent' : '#fff';
+  signupBtn.style.color      = isLogin ? 'var(--muted)' : 'var(--or)';
+  signupBtn.style.boxShadow  = isLogin ? 'none' : 'var(--shadow-sm)';
+}
+
+function showFirebaseSetup(){
+  closeModal('loginModal');
+  openModal('fbSetupModal');
+}
+
+function toggleUserDash(){
+  const el = document.getElementById('userDashOverlay');
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+// Close dash overlay on outside click
+document.addEventListener('click', e => {
+  const overlay = document.getElementById('userDashOverlay');
+  const avatar  = document.getElementById('navAvatar');
+  if(overlay && overlay.style.display !== 'none'){
+    if(!overlay.contains(e.target) && !avatar?.contains(e.target)){
+      overlay.style.display = 'none';
+    }
+  }
+});
+
+/* ════════════════════════════════
+   EMAIL / PASSWORD AUTH
+════════════════════════════════ */
+async function doEmailLogin(){
+  const email = document.getElementById('li_email').value.trim();
+  const pass  = document.getElementById('li_pass').value;
+  if(!email || !pass){ showToast('Please fill in both fields', 'err'); return; }
+
+  if(!FB_READY){
+    // LocalStorage fallback
+    const users = JSON.parse(localStorage.getItem('ql_users') || '[]');
+    const u = users.find(u => u.email === email && u.pass === pass);
+    if(!u){ showToast('Invalid email or password', 'err'); return; }
+    currentUser = { uid: u.uid, name: u.name, email: u.email };
+    onUserLoggedIn(currentUser);
+    return;
+  }
+
+  const btn = document.getElementById('loginBtn');
+  btn.textContent = 'Logging in...'; btn.disabled = true;
+  try {
+    await fbAuth.signInWithEmailAndPassword(email, pass);
+    // onAuthStateChanged handles the rest
+  } catch(e){
+    console.error('Login error:', e.code, e.message);
+    showToast(friendlyAuthError(e.code) + ' [' + (e.code||'unknown') + ']', 'err', 6000);
+  } finally {
+    btn.textContent = 'Login →'; btn.disabled = false;
+  }
+}
+
+async function doEmailSignup(){
+  const name  = document.getElementById('su_name').value.trim();
+  const email = document.getElementById('su_email').value.trim();
+  const pass  = document.getElementById('su_pass').value;
+  if(!name || !email || !pass){ showToast('Please fill all fields', 'err'); return; }
+  if(pass.length < 8){ showToast('Password must be at least 8 characters', 'err'); return; }
+
+  if(!FB_READY){
+    // LocalStorage fallback
+    const users = JSON.parse(localStorage.getItem('ql_users') || '[]');
+    if(users.find(u => u.email === email)){ showToast('Email already registered', 'err'); return; }
+    const u = { uid: 'u_' + Date.now(), name, email, pass };
+    users.push(u);
+    localStorage.setItem('ql_users', JSON.stringify(users));
+    currentUser = { uid: u.uid, name, email };
+    onUserLoggedIn(currentUser);
+    // Open wizard to build their page
+    setTimeout(() => openModal('wizardModal'), 400);
+    return;
+  }
+
+  const btn = document.getElementById('signupBtn');
+  btn.textContent = 'Creating account...'; btn.disabled = true;
+  try {
+    const cred = await fbAuth.createUserWithEmailAndPassword(email, pass);
+    await cred.user.updateProfile({ displayName: name });
+    // onAuthStateChanged fires and calls onUserLoggedIn
+    setTimeout(() => openModal('wizardModal'), 600);
+  } catch(e){
+    console.error('Signup error:', e.code, e.message);
+    showToast(friendlyAuthError(e.code) + ' [' + (e.code||'unknown') + ']', 'err', 6000);
+  } finally {
+    btn.textContent = 'Create Account →'; btn.disabled = false;
+  }
+}
+
+/* ════════════════════════════════
+   GOOGLE AUTH
+════════════════════════════════ */
+async function signInWithGoogle(){
+  if(!FB_READY){
+    showToast('Firebase not configured. See setup guide.', 'err');
+    showFirebaseSetup();
+    return;
+  }
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    const result = await fbAuth.signInWithPopup(provider);
+    // onAuthStateChanged handles UI update
+    closeModal('loginModal');
+    setTimeout(() => openModal('wizardModal'), 500);
+  } catch(e){
+    console.error('Google sign-in error:', e.code, e.message);
+    if(e.code === 'auth/popup-closed-by-user') return;
+    if(e.code === 'auth/popup-blocked'){
+      showToast('Popup blocked — allow popups for this site in your browser settings', 'err', 6000);
+    } else {
+      showToast(friendlyAuthError(e.code) + ' [' + e.code + ']', 'err', 6000);
+    }
+  }
+}
+
+/* ════════════════════════════════
+   PASSWORD RESET
+════════════════════════════════ */
+async function forgotPassword(){
+  const email = document.getElementById('li_email').value.trim();
+  if(!email){ showToast('Enter your email first', 'err'); return; }
+  if(!FB_READY){ showToast('Firebase not configured', 'err'); return; }
+  try {
+    await fbAuth.sendPasswordResetEmail(email);
+    showToast('Reset email sent! Check your inbox 📧');
+  } catch(e){
+    showToast(friendlyAuthError(e.code), 'err');
+  }
+}
+
+/* ════════════════════════════════
+   SIGN OUT
+════════════════════════════════ */
+async function signOut(){
+  document.getElementById('userDashOverlay').style.display = 'none';
+  if(FB_READY) await fbAuth.signOut();
+  else { localStorage.removeItem('ql_user'); currentUser = null; onUserLoggedOut(); }
+  showToast('Signed out. See you soon! 👋');
+}
+
+/* ════════════════════════════════
+   FIRESTORE — SAVE PAGE DATA
+════════════════════════════════ */
+async function savePageToFirestore(pageData){
+  console.log('savePageToFirestore called. FB_READY:', FB_READY, 'currentUser:', currentUser?.email, 'fbDb:', !!fbDb);
+  if(!currentUser){ console.error('Not logged in - cannot save'); return; }
+  if(!fbDb){ console.error('Firestore not initialized'); return; }
+  const slug = pageData.slug || document.getElementById('bizSlug')?.value?.trim();
+  if(!slug){ console.warn('No slug — cannot save'); return; }
+
+  // Photos are now Cloudinary URLs (not base64) — safe to save to Firestore
+  const saveData = {};
+  for(const [k,v] of Object.entries(pageData)){
+    if(v === undefined) continue;
+    if(typeof v === 'string' && v.startsWith('data:')) continue; // skip any remaining base64
+    if(k === 'menu' && Array.isArray(v)){
+      saveData[k] = v.map(item => ({...item, photo: item.photo?.startsWith('data:') ? null : (item.photo||null)}));
+      continue;
+    }
+    saveData[k] = v;
+  }
+
+  try {
+    console.log('Saving to Firestore: pages/' + slug, '...');
+    await fbDb.collection('pages').doc(slug).set({
+      ...saveData,
+      slug,
+      userId:    currentUser.uid,
+      userEmail: currentUser.email,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    }, { merge: true });
+    console.log('✅ Saved to Firestore successfully: pages/' + slug);
+    // Also index by uid so user can find their pages
+    await fbDb.collection('users').doc(currentUser.uid).set({
+      pages: firebase.firestore.FieldValue.arrayUnion(slug),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    }, { merge: true });
+    console.log('✅ Page saved to Firestore:', slug);
+  } catch(e){
+    console.error('Firestore save error:', e);
+  }
+}
+
+async function loadPageFromFirestore(){
+  if(!FB_READY || !currentUser) return null;
+  try {
+    const doc = await fbDb.collection('pages').doc(currentUser.uid).get();
+    return doc.exists ? doc.data() : null;
+  } catch(e){ return null; }
+}
+
+/* ════════════════════════════════
+   AUTH ERROR MESSAGES
+════════════════════════════════ */
+function friendlyAuthError(code){
+  const map = {
+    'auth/user-not-found':         'No account with that email.',
+    'auth/wrong-password':         'Incorrect password.',
+    'auth/invalid-credential':     'Incorrect email or password.',
+    'auth/email-already-in-use':   'Email already registered. Try logging in.',
+    'auth/weak-password':          'Password too weak. Use 8+ characters.',
+    'auth/invalid-email':          'Invalid email address.',
+    'auth/network-request-failed': 'Network error. Check your connection.',
+    'auth/too-many-requests':      'Too many attempts. Try again later.',
+    'auth/popup-blocked':          'Popup blocked. Allow popups for this site.',
+    'auth/configuration-not-found':'Auth not enabled in Firebase Console.',
+    'auth/unauthorized-domain':    'Domain not authorized. Add it in Firebase Console → Auth → Settings → Authorized domains.',
+    'auth/internal-error':         'Firebase internal error. Check console.',
+    'auth/operation-not-allowed':  'Email/Password not enabled in Firebase Console.',
+  };
+  return map[code] || 'Something went wrong. Please try again.';
+}
+
+/* ════════════════════════════════
+   TOAST NOTIFICATION
+════════════════════════════════ */
+function showToast(msg, type='ok', dur=3500){
+  let toast = document.getElementById('qlToast');
+  if(!toast){
+    toast = document.createElement('div');
+    toast.id = 'qlToast';
+    toast.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:#111;color:#fff;padding:12px 24px;border-radius:100px;font-size:.875rem;font-weight:600;z-index:9999;transition:transform .3s;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.25);display:flex;align-items:center;gap:8px;max-width:90vw';
+    document.body.appendChild(toast);
+  }
+  const icon = type === 'err' ? '❌' : type === 'info' ? 'ℹ️' : '✅';
+  toast.innerHTML = `${icon} ${msg}`;
+  toast.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => { toast.style.transform = 'translateX(-50%) translateY(100px)'; }, dur);
+}
+
+
+/* ════════════════════════════════
+   RENDER PUBLIC PAGE — Premium Design
+════════════════════════════════ */
+function renderPublicPage(d){
+  const phone = (d.phone||'').replace(/\D/g,'');
+  const wa    = (d.whatsapp||d.phone||'').replace(/\D/g,'');
+  const slug  = d.slug || __slug;
+
+  /* Gallery */
+  const gallery = (d.gallery||[]);
+  const galleryHTML = gallery.length ? `
+    <section style="padding:0 0 24px">
+      <div style="padding:0 20px 12px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:#0D0D0D">Photos</div>
+      <div style="display:flex;gap:10px;overflow-x:auto;padding:0 20px 4px;-webkit-overflow-scrolling:touch;scrollbar-width:none">
+        ${gallery.map(src=>`<img src="${src}" loading="lazy" style="width:130px;height:130px;object-fit:cover;border-radius:16px;flex-shrink:0;box-shadow:0 4px 16px rgba(0,0,0,.1)">`).join('')}
+      </div>
+    </section>` : '';
+
+  /* Offers */
+  const offers = (d.offers||[]).filter(o=>o.active!==false);
+  const offersHTML = offers.length ? `
+    <section style="padding:0 20px 24px">
+      <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:#0D0D0D;margin-bottom:12px">Today's Offers 🔥</div>
+      <div style="display:flex;gap:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:4px">
+        ${offers.map(o=>`
+          <div style="min-width:200px;max-width:220px;flex-shrink:0;background:linear-gradient(135deg,#FF5C00 0%,#FF8C42 100%);border-radius:20px;padding:18px;box-shadow:0 8px 24px rgba(255,92,0,.3)">
+            <div style="font-size:1.5rem;margin-bottom:8px">🎉</div>
+            <div style="font-weight:800;font-size:.95rem;color:#fff;margin-bottom:4px;font-family:'Syne',sans-serif">${o.title||''}</div>
+            <div style="font-size:.8rem;color:rgba(255,255,255,.85);line-height:1.5">${o.desc||''}</div>
+          </div>`).join('')}
+      </div>
+    </section>` : '';
+
+  /* Menu */
+  const menu = (d.menu||[]);
+  const menuHTML = menu.length ? `
+    <section style="padding:0 20px 24px">
+      <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:#0D0D0D;margin-bottom:4px">Menu</div>
+      <div style="display:flex;flex-direction:column">
+        ${menu.map((item,i)=>`
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 0;${i<menu.length-1?'border-bottom:1px solid #f5f4f1':''}">
+            ${item.photo?`<img src="${item.photo}" style="width:76px;height:76px;border-radius:14px;object-fit:cover;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.08)" loading="lazy">`:`<div style="width:76px;height:76px;border-radius:14px;background:linear-gradient(135deg,#FF5C00,#FF8C42);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0">🍽️</div>`}
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:700;font-size:.92rem;color:#0D0D0D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.name||''}</div>
+              ${item.desc?`<div style="font-size:.78rem;color:#888;margin-top:2px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${item.desc}</div>`:''}
+              ${item.price?`<div style="font-weight:800;color:#FF5C00;font-size:.92rem;margin-top:6px;font-family:'Space Mono',monospace">₹${item.price}</div>`:''}
+            </div>
+            <button style="padding:8px 16px;border:2px solid #FF5C00;border-radius:100px;color:#FF5C00;font-weight:700;font-size:.78rem;background:transparent;cursor:pointer;flex-shrink:0;transition:all .2s" onmouseover="this.style.background='#FF5C00';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='#FF5C00'">+ Add</button>
+          </div>`).join('')}
+      </div>
+    </section>` : '';
+
+  /* Platforms */
+  const platforms = d.platforms||{};
+  const platformEntries = Object.entries(platforms).filter(([,url])=>url);
+  const platformIcons = {swiggy:'🟠',zomato:'🔴',magicpin:'✨',amazon:'📦',flipkart:'💙',meesho:'🛍️',ajio:'👗',blinkit:'⚡',dunzo:'🛵',justdial:'📞',website:'🌐',booking:'📅',whatsapp:'💬',custom:'🔗'};
+  const platformsHTML = platformEntries.length ? `
+    <section id="orderSection" style="padding:0 20px 28px">
+      <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:#0D0D0D;margin-bottom:12px">Order Online</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        ${platformEntries.map(([id,url])=>`
+          <a href="${url}" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1.5px solid #e8e8e8;border-radius:100px;font-size:.82rem;font-weight:700;color:#0D0D0D;text-decoration:none;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:all .2s" onmouseover="this.style.borderColor='#FF5C00';this.style.color='#FF5C00'" onmouseout="this.style.borderColor='#e8e8e8';this.style.color='#0D0D0D'">
+            <span>${platformIcons[id]||'🔗'}</span>${id.charAt(0).toUpperCase()+id.slice(1)}
+          </a>`).join('')}
+      </div>
+    </section>` : '';
+
+  /* Rating stars */
+  const stars = parseFloat(d.rating||4.5);
+  const starsHTML = '★'.repeat(Math.floor(stars)) + (stars%1>=0.5?'½':'');
+
+  document.body.innerHTML = `
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap');
+      *{margin:0;padding:0;box-sizing:border-box} body{background:#f5f4f1;font-family:'DM Sans',sans-serif} ::-webkit-scrollbar{width:0;height:0}
+      @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+      .pub-card{background:#fff;border-radius:24px;margin:0 12px 12px;box-shadow:0 2px 16px rgba(0,0,0,.06);animation:fadeUp .4s ease both}
+      .action-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px 12px;border-radius:18px;text-decoration:none;font-weight:700;font-size:.75rem;border:none;cursor:pointer;transition:transform .15s,box-shadow .15s;flex:1}
+      .action-btn:active{transform:scale(.96)}
+      .action-btn .icon{font-size:1.4rem}
+    </style>
+
+    <div style="max-width:420px;margin:0 auto;min-height:100vh;padding-bottom:48px">
+
+      <!-- Hero Cover -->
+      <div style="position:relative;width:100%;height:300px;background:linear-gradient(135deg,#1a1a2e,#16213e);overflow:hidden;border-radius:0 0 32px 32px">
+        ${d.coverPhoto?`<img src="${d.coverPhoto}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" loading="eager">`:''}
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 20%,rgba(0,0,0,.85) 100%)"></div>
+
+        <!-- Top bar -->
+        <div style="position:absolute;top:0;left:0;right:0;padding:16px 20px;display:flex;align-items:center;justify-content:space-between">
+          <div style="background:rgba(0,0,0,.3);backdrop-filter:blur(10px);border-radius:100px;padding:6px 14px;font-size:.72rem;font-weight:700;color:#fff;font-family:'Space Mono',monospace;letter-spacing:.02em">⚡ QwikLink</div>
+          <div style="background:${d.isOpen!==false?'rgba(34,197,94,.25)':'rgba(239,68,68,.25)'};backdrop-filter:blur(10px);border:1px solid ${d.isOpen!==false?'rgba(74,222,128,.4)':'rgba(248,113,113,.4)'};border-radius:100px;padding:6px 14px;font-size:.72rem;font-weight:700;color:${d.isOpen!==false?'#4ade80':'#f87171'}">${d.isOpen!==false?'● Open Now':'● Closed'}</div>
+        </div>
+
+        <!-- Business info -->
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:24px 20px">
+          <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:900;color:#fff;line-height:1.2;margin-bottom:6px;text-shadow:0 2px 8px rgba(0,0,0,.3)">${d.name||'Business Name'}</div>
+          ${d.tagline?`<div style="font-size:.85rem;color:rgba(255,255,255,.75);margin-bottom:10px;font-style:italic">"${d.tagline}"</div>`:''}
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:4px">
+              <span style="color:#FFE14D;font-size:.85rem">${starsHTML}</span>
+              <span style="color:rgba(255,255,255,.8);font-size:.8rem;font-weight:600">${stars}</span>
+            </div>
+            ${d.city?`<div style="width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.4)"></div><div style="font-size:.8rem;color:rgba(255,255,255,.75)">📍 ${d.city}</div>`:''}
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="padding:16px 12px 4px">
+        <div style="display:flex;gap:10px">
+          <a href="tel:+91${phone}" class="action-btn" style="background:#FF5C00;color:#fff;box-shadow:0 6px 20px rgba(255,92,0,.35)">
+            <span class="icon">📞</span>Call
+          </a>
+          <a href="https://wa.me/91${wa}?text=Hi! I found you on QwikLink 👋" target="_blank" class="action-btn" style="background:#25D366;color:#fff;box-shadow:0 6px 20px rgba(37,211,102,.35)">
+            <span class="icon">💬</span>WhatsApp
+          </a>
+          <a href="${d.mapsUrl||'https://maps.google.com'}" target="_blank" class="action-btn" style="background:#4285F4;color:#fff;box-shadow:0 6px 20px rgba(66,133,244,.35)">
+            <span class="icon">📍</span>Directions
+          </a>
+          <button onclick="document.getElementById('orderSection')?.scrollIntoView({behavior:'smooth'})" class="action-btn" style="background:#0D0D0D;color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.25)">
+            <span class="icon">🛒</span>Order
+          </button>
+        </div>
+      </div>
+
+      <!-- Gallery -->
+      ${gallery.length ? `<div class="pub-card" style="padding:20px 20px 20px 20px;overflow:hidden">${galleryHTML}</div>` : ''}
+
+      <!-- Offers -->
+      ${offers.length ? `<div class="pub-card" style="padding:20px;overflow:hidden">${offersHTML}</div>` : ''}
+
+      <!-- Menu -->
+      ${menu.length ? `<div class="pub-card" style="padding:20px;overflow:hidden">${menuHTML}</div>` : ''}
+
+      <!-- Platforms -->
+      ${platformEntries.length ? `<div class="pub-card" style="padding:20px;overflow:hidden">${platformsHTML}</div>` : ''}
+
+      <!-- Address -->
+      ${d.address ? `
+      <div class="pub-card" style="padding:20px;display:flex;align-items:center;gap:14px" onclick="window.open('${d.mapsUrl||'https://maps.google.com'}','_blank')">
+        <div style="width:44px;height:44px;border-radius:14px;background:#f0f4ff;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">📍</div>
+        <div>
+          <div style="font-weight:700;font-size:.88rem;color:#0D0D0D">Address</div>
+          <div style="font-size:.82rem;color:#666;margin-top:2px;line-height:1.5">${d.address}</div>
+        </div>
+        <div style="margin-left:auto;color:#aaa;font-size:1.1rem">›</div>
+      </div>` : ''}
+
+      <!-- Footer -->
+      <div style="text-align:center;padding:28px 16px 8px">
+        <a href="/" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:#fff;border-radius:100px;text-decoration:none;box-shadow:0 2px 12px rgba(0,0,0,.08);font-size:.78rem;font-weight:700;color:#666">
+          Powered by <span style="color:#FF5C00;font-weight:900;font-family:'Syne',sans-serif">Qwik<span style="color:#0D0D0D">Link</span></span> ⚡
+        </a>
+      </div>
+    </div>`;
+}
+
+
+/* ════════════════════════════════
+   PLATFORM CONFIG
+════════════════════════════════ */
+const PLATFORM_MAP = {
+  restaurant:[
+    {id:'swiggy',  icon:'🟠', name:'Swiggy',   ph:'https://swiggy.com/restaurant/your-id'},
+    {id:'zomato',  icon:'🔴', name:'Zomato',   ph:'https://zomato.com/your-restaurant'},
+    {id:'magicpin',icon:'✨', name:'Magicpin', ph:'https://magicpin.in/your-listing'},
+    {id:'website', icon:'🌐', name:'Website',  ph:'https://yourwebsite.com'},
+  ],
+  clothing:[
+    {id:'meesho',  icon:'🛍️', name:'Meesho',   ph:'https://meesho.com/your-shop'},
+    {id:'amazon',  icon:'📦', name:'Amazon',   ph:'https://amazon.in/your-shop'},
+    {id:'ajio',    icon:'👗', name:'Ajio',     ph:'https://ajio.com/your-shop'},
+    {id:'flipkart',icon:'💙', name:'Flipkart', ph:'https://flipkart.com/your-shop'},
+    {id:'website', icon:'🌐', name:'Website',  ph:'https://yourwebsite.com'},
+  ],
+  jewellery:[
+    {id:'amazon',  icon:'📦', name:'Amazon',   ph:'https://amazon.in/your-shop'},
+    {id:'flipkart',icon:'💙', name:'Flipkart', ph:'https://flipkart.com/your-shop'},
+    {id:'website', icon:'🌐', name:'Catalogue',ph:'https://yourwebsite.com'},
+  ],
+  salon:[
+    {id:'justdial',icon:'📞', name:'JustDial', ph:'https://justdial.com/your-salon'},
+    {id:'booking', icon:'📅', name:'Booking',  ph:'https://calendly.com/your-salon'},
+    {id:'website', icon:'🌐', name:'Website',  ph:'https://yourwebsite.com'},
+  ],
+  grocery:[
+    {id:'blinkit', icon:'⚡', name:'Blinkit',  ph:'https://blinkit.com/your-store'},
+    {id:'dunzo',   icon:'🛵', name:'Dunzo',    ph:'https://dunzo.com/your-store'},
+    {id:'website', icon:'🌐', name:'Website',  ph:'https://yourwebsite.com'},
+  ],
+  service:[
+    {id:'justdial',icon:'📞', name:'JustDial', ph:'https://justdial.com/your-listing'},
+    {id:'website', icon:'🌐', name:'Website',  ph:'https://yourwebsite.com'},
+    {id:'booking', icon:'📅', name:'Booking',  ph:'https://calendly.com/your-service'},
+  ],
+  other:[
+    {id:'whatsapp',icon:'💬', name:'WhatsApp Order',ph:'https://wa.me/91XXXXXXXXXX'},
+    {id:'website', icon:'🌐', name:'Website',       ph:'https://yourwebsite.com'},
+    {id:'custom',  icon:'🔗', name:'Custom Link',   ph:'https://your-link.com'},
+  ],
+};
+
+/* ════════════════════════════════
+   STATE
+════════════════════════════════ */
+let currentStep = 0;
+let bizData = {};
+let coverPhotoData = null;
+let galleryPhotosData = [];
+let currentQRInstance = null;
+
+/* ── PLAN & LINK MANAGEMENT ── */
+const PLAN_LIMITS = { free: 5, grow: Infinity, pro: Infinity };
+const PLAN_PRICES = { free: 0, grow: 299, pro: 499 };
+
+function getUserPlan(){ return (currentUser && JSON.parse(localStorage.getItem('ql_plan_'+currentUser.uid)||'null')) || {plan:'free',links:[]}; }
+function savePlan(data){ if(currentUser) localStorage.setItem('ql_plan_'+currentUser.uid, JSON.stringify(data)); }
+
+function getUserLinks(){
+  const p = getUserPlan();
+  // also merge from Firestore cache
+  const cached = localStorage.getItem('ql_links_'+(currentUser?.uid||'guest'));
+  return cached ? JSON.parse(cached) : (p.links||[]);
+}
+function saveUserLinks(links){
+  localStorage.setItem('ql_links_'+(currentUser?.uid||'guest'), JSON.stringify(links));
+  if(window.fbDb && currentUser){
+    window.fbDb.collection('users').doc(currentUser.uid).set({links, updatedAt: new Date().toISOString()},{merge:true}).catch(()=>{});
+  }
+}
+function getLinksCount(){ return getUserLinks().length; }
+function getPlanLimit(){
+  const p = getUserPlan();
+  return PLAN_LIMITS[p.plan||'free']||5;
+}
+function canCreateLink(){ return getLinksCount() < getPlanLimit(); }
+
+/* ════════════════════════════════
+   MODALS
+════════════════════════════════ */
+function openModal(id){
+  document.getElementById(id).classList.add('show');
+  document.body.style.overflow='hidden';
+  if(id==='wizardModal'){ buildWizPlatformChips(); generateInitialQR(); }
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('show');
+  document.body.style.overflow='';
+}
+function startWizard(type){
+  openModal('wizardModal');
+  document.getElementById('bizType').value=type;
+  updatePlatformOptions();
+  buildWizPlatformChips();
+}
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{ if(e.target===o) closeModal(o.id); });
+});
+
+/* ════════════════════════════════
+   WIZARD STEPS
+════════════════════════════════ */
+function goToStep(n){
+  document.querySelectorAll('.wizard-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('step'+n).classList.add('active');
+  for(let i=0;i<5;i++){
+    const p=document.getElementById('prog'+i);
+    p.classList.remove('active','done');
+    const circle=p.querySelector('.prog-circle');
+    if(i<n){p.classList.add('done');circle.innerHTML='✓';}
+    else if(i===n){p.classList.add('active');circle.innerHTML=(i+1);}
+    else{circle.innerHTML=(i+1);}
+  }
+  currentStep=n;
+  document.getElementById('backBtn').style.visibility=n>0?'visible':'hidden';
+  document.getElementById('nextBtn').style.display=n===4?'none':'inline-flex';
+  if(n===4){generateInitialQR();updateQRCode();}
+}
+function nextStep(from){
+  if(from===0){
+    if(!document.getElementById('bizName').value.trim()){alert('Please enter your business name');return;}
+    if(!document.getElementById('bizType').value){alert('Please select your business type');return;}
+  }
+  if(from===1){
+    if(!document.getElementById('bizPhone').value.trim()){alert('Please enter your phone number');return;}
+    bizData.platform_links=getWizPlatformLinks();
+  }
+  if(from<4) goToStep(from+1);
+}
+function prevStep(from){ if(from>0) goToStep(from-1); }
+
+/* ════════════════════════════════
+   PLATFORM CHIPS
+════════════════════════════════ */
+function buildWizPlatformChips(){
+  const catId=document.getElementById('bizType')?.value||'other';
+  const platforms=PLATFORM_MAP[catId]||PLATFORM_MAP.other;
+  const chipsEl=document.getElementById('wizPlatformChips');
+  const inputsEl=document.getElementById('wizPlatformInputs');
+  if(!chipsEl||!inputsEl) return;
+  chipsEl.innerHTML=platforms.map(p=>
+    `<div class="plat-chip" id="wizchip_${p.id}" onclick="toggleWizChip('${p.id}','${p.name}','${encodeURIComponent(p.ph)}')">${p.icon} ${p.name}</div>`
+  ).join('');
+  inputsEl.innerHTML='';
+}
+function toggleWizChip(pid,name,phEncoded){
+  const ph=decodeURIComponent(phEncoded);
+  const chip=document.getElementById('wizchip_'+pid);
+  const inputsEl=document.getElementById('wizPlatformInputs');
+  if(!chip||!inputsEl) return;
+  const isOn=chip.classList.contains('on');
+  if(isOn){
+    chip.classList.remove('on');
+    document.getElementById('wizplatinput_'+pid)?.remove();
+  } else {
+    chip.classList.add('on');
+    if(!document.getElementById('wizplatinput_'+pid)){
+      const d=document.createElement('div');
+      d.id='wizplatinput_'+pid;
+      d.style.marginBottom='10px';
+      d.innerHTML=`<label class="form-label">${name} Link / URL</label><input class="form-input plat-wiz-url" data-platform="${pid}" placeholder="${ph}">`;
+      inputsEl.appendChild(d);
+    }
+  }
+}
+function getWizPlatformLinks(){
+  const obj={};
+  document.querySelectorAll('.plat-wiz-url').forEach(inp=>{
+    const pid=inp.dataset.platform;
+    const url=inp.value.trim();
+    if(pid&&url) obj[pid]=url;
+  });
+  return obj;
+}
+function updatePlatformOptions(){
+  const type=document.getElementById('bizType').value||'other';
+  const labels={restaurant:'🍽️ Menu / Products (up to 10)',clothing:'👗 Products (up to 10)',jewellery:'💍 Items (up to 10)',salon:'✂️ Services (up to 10)',grocery:'🛒 Items (up to 10)',service:'🔧 Services (up to 10)',other:'📦 Products / Services (up to 10)'};
+  const lbl=document.getElementById('productsLabel');
+  if(lbl) lbl.textContent=labels[type]||labels.other;
+  buildWizPlatformChips();
+}
+
+/* ════════════════════════════════
+   PHOTO UPLOADS
+════════════════════════════════ */
+function handleCoverUpload(input){
+  const file=input.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    coverPhotoData=e.target.result;
+    const zone=document.getElementById('coverZone');
+    zone.innerHTML=`<div class="cover-preview"><img src="${coverPhotoData}" alt="cover"><button class="cover-preview-remove" onclick="removeCover()">✕</button></div>`;
+  };
+  reader.readAsDataURL(file);
+}
+function removeCover(){
+  coverPhotoData=null;
+  const zone=document.getElementById('coverZone');
+  zone.innerHTML=`<div class="upload-zone" onclick="document.getElementById('coverFileInput').click()"><input type="file" id="coverFileInput" accept="image/*" style="display:none" onchange="handleCoverUpload(this)"><div class="upload-icon">🖼️</div><div class="upload-text">Click to upload cover photo</div><div class="upload-hint">JPG, PNG or WEBP · Recommended 1200×600px</div></div>`;
+}
+function handleGalleryUpload(input){
+  const files=Array.from(input.files);
+  files.forEach(file=>{
+    if(galleryPhotosData.length>=10) return;
+    const reader=new FileReader();
+    reader.onload=e=>{
+      galleryPhotosData.push(e.target.result);
+      renderGalleryGrid();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function renderGalleryGrid(){
+  const grid=document.getElementById('galleryGrid');
+  grid.innerHTML=galleryPhotosData.map((src,i)=>
+    `<div class="gallery-thumb"><img src="${src}" alt="gallery"><button class="gallery-thumb-remove" onclick="removeGalleryPhoto(${i})">✕</button></div>`
+  ).join('');
+  if(galleryPhotosData.length<10){
+    grid.innerHTML+=`<div class="gallery-add-btn"><input type="file" accept="image/*" multiple onchange="handleGalleryUpload(this)"><span style="font-size:1.4rem">+</span><span>Add Photos</span></div>`;
+  }
+}
+function removeGalleryPhoto(i){
+  galleryPhotosData.splice(i,1);
+  renderGalleryGrid();
+}
+
+/* ════════════════════════════════
+   OFFERS
+════════════════════════════════ */
+function addOffer(){
+  const c=document.getElementById('offersContainer');
+  const d=document.createElement('div');
+  d.className='offer-row';
+  d.innerHTML=`<input class="form-input" placeholder="e.g. Free dessert on orders above ₹499"><button class="offer-remove" onclick="this.parentElement.remove()">✕</button>`;
+  c.appendChild(d);
+}
+
+/* ════════════════════════════════
+   PRODUCTS
+════════════════════════════════ */
+function addProduct(){
+  const c=document.getElementById('productsContainer');
+  if(c.children.length>=10){ alert('Maximum 10 items allowed on free plan.'); return; }
+  const idx=Date.now();
+  const d=document.createElement('div');
+  d.className='product-card';
+  d.innerHTML=`
+    <div class="pc-row">
+      <div class="product-thumb-wrap">
+        <div class="product-thumb-preview" title="Click to add photo">
+          📷
+          <input type="file" accept="image/*" onchange="handleProductPhoto(this)">
+        </div>
+      </div>
+      <div class="pc-fields">
+        <input class="form-input" placeholder="Item name e.g. Margherita Pizza" style="padding:10px 12px;font-size:.88rem">
+        <input class="form-input" placeholder="Price e.g. ₹299" style="padding:10px 12px;font-size:.88rem">
+        <input class="form-input" placeholder="Short description (optional)" style="padding:10px 12px;font-size:.88rem">
+      </div>
+      <button class="pc-remove" onclick="this.closest('.product-card').remove()">✕</button>
+    </div>`;
+  c.appendChild(d);
+}
+function handleProductPhoto(input){
+  const file=input.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const thumb=input.closest('.product-thumb-preview');
+    thumb.innerHTML=`<img src="${e.target.result}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:10px"><input type="file" accept="image/*" onchange="handleProductPhoto(this)" style="position:absolute;inset:0;opacity:0;cursor:pointer">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ════════════════════════════════
+   QR CODE
+════════════════════════════════ */
+function generateInitialQR(){
+  const slug=document.getElementById('bizSlug')?.value||'yourname';
+  const url=`https://qwiklink-app.netlify.app/?slug=${slug}`;
+  const container=document.getElementById('qrCode');
+  if(!container) return;
+  container.innerHTML='';
+  try{
+    currentQRInstance=new QRCode(container,{
+      text:url, width:180, height:180,
+      colorDark:'#0D0D0D', colorLight:'#ffffff',
+      correctLevel:QRCode.CorrectLevel.M
+    });
+  } catch(e){ container.innerHTML='<div style="font-size:3rem;padding:20px">📱</div>'; }
+}
+function updateQRCode(){
+  const slug=document.getElementById('bizSlug')?.value||'yourname';
+  const slugDisplay=document.getElementById('slugDisplay');
+  if(slugDisplay) slugDisplay.textContent=`qwiklink-app.netlify.app/?slug=${slug}`;
+  generateInitialQR();
+}
+function downloadQR(format){
+  const slug=document.getElementById('bizSlug')?.value||'yourname';
+  const container=document.getElementById('qrCode');
+  const canvas=container.querySelector('canvas');
+  if(!canvas){ alert('QR code not ready yet'); return; }
+  if(format==='png'){
+    const link=document.createElement('a');
+    link.download=`qwiklink-qr-${slug}.png`;
+    link.href=canvas.toDataURL('image/png');
+    link.click();
+  } else {
+    // SVG export
+    const size=180;
+    const ctx=canvas.getContext('2d');
+    const imageData=ctx.getImageData(0,0,canvas.width,canvas.height);
+    const scale=canvas.width/size;
+    let rects='';
+    for(let y=0;y<size;y++){
+      for(let x=0;x<size;x++){
+        const px=Math.floor(x*scale);
+        const py=Math.floor(y*scale);
+        const idx4=(py*canvas.width+px)*4;
+        if(imageData.data[idx4]<128) rects+=`<rect x="${x}" y="${y}" width="1" height="1" fill="#000"/>`;
+      }
+    }
+    const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}"><rect width="${size}" height="${size}" fill="#fff"/>${rects}</svg>`;
+    const blob=new Blob([svg],{type:'image/svg+xml'});
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement('a');
+    link.download=`qwiklink-qr-${slug}.svg`;
+    link.href=url;
+    link.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+}
+function copyLink(){
+  const slug=document.getElementById('bizSlug')?.value||'yourname';
+  const url=`https://qwiklink-app.netlify.app/?slug=${slug}`;
+  navigator.clipboard.writeText(url).then(()=>{
+    const btn=document.querySelector('.copy-btn');
+    const orig=btn.textContent;
+    btn.textContent='Copied!';
+    btn.style.background='#22C55E';
+    setTimeout(()=>{btn.textContent=orig;btn.style.background='';},2000);
+  });
+}
+async function launchPage(){
+  if(!currentUser){ openModal('loginModal'); return; }
+  const slug = document.getElementById('bizSlug')?.value?.trim() || 'page';
+  const links = getUserLinks();
+  const existing = links.find(l=>l.slug===slug);
+  if(!existing && !canCreateLink()){
+    showUpgradeModal(); return;
+  }
+  let pageData = collectPageData();
+  // Show saving state
+  const launchBtn = document.querySelector('[onclick="launchPage()"]');
+  if(launchBtn){ launchBtn.textContent = '⏳ Saving...'; launchBtn.disabled = true; }
+  
+  // Upload photos to Cloudinary first
+  pageData = await uploadAllPhotos(pageData);
+  
+  // Save to localStorage
+  localStorage.setItem('ql_page_' + slug, JSON.stringify(pageData));
+  
+  // Save page JSON to Cloudinary CDN
+  let cdnUrl = null;
+  try{
+    const jsonBlob = new Blob([JSON.stringify(pageData)], {type:'application/json'});
+    const jsonFile = new File([jsonBlob], `${slug}.json`);
+    const fd = new FormData();
+    fd.append('file', jsonFile);
+    fd.append('upload_preset', CLOUDINARY_PRESET);
+    fd.append('public_id', 'qwiklink/pages/' + slug);
+    fd.append('resource_type', 'raw');
+    fd.append('invalidate', 'true');
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/raw/upload`, {method:'POST', body:fd});
+    const data = await res.json();
+    if(data.secure_url){
+      cdnUrl = data.secure_url;
+      // Store the exact URL in localStorage so we can fetch it directly
+      localStorage.setItem('ql_cdn_' + slug, cdnUrl);
+      console.log('✅ Page JSON saved to Cloudinary CDN:', cdnUrl);
+    }
+  }catch(e){ console.log('Cloudinary JSON save failed:', e); }
+
+  // Save to Firestore with cdnUrl field
+  savePageToFirestore({...pageData, slug, cdnUrl});
+  
+  if(launchBtn){ launchBtn.textContent = '🚀 Preview My Page'; launchBtn.disabled = false; }
+  // Save link record
+  if(!existing){
+    const newLink = {
+      slug, name: pageData.name, category: pageData.category,
+      url: `https://qwiklink-app.netlify.app/?slug=${slug}`,
+      createdAt: new Date().toISOString(),
+      clicks:0, orders:0
+    };
+    links.push(newLink);
+    saveUserLinks(links);
+  }
+  showToast('🎉 Page saved! Link is live.', 'ok');
+  openPreview();
+}
+
+function showUpgradeModal(){
+  const count = getLinksCount();
+  document.getElementById('upgradeModal').style.display='flex';
+  document.getElementById('upgradeMsg').textContent = `You've used ${count}/5 free links. Upgrade to create unlimited pages.`;
+}
+
+function collectPageData(){
+  return {
+    slug:       document.getElementById('bizSlug')?.value?.trim() || 'page',
+    name:       document.getElementById('bizName')?.value?.trim() || '',
+    tagline:    document.getElementById('bizTagline')?.value?.trim() || '',
+    city:       document.getElementById('bizCity')?.value?.trim() || '',
+    category:   document.getElementById('bizType')?.value || 'restaurant',
+    phone:      document.getElementById('bizPhone')?.value?.trim() || '',
+    whatsapp:   document.getElementById('bizWA')?.value?.trim() || '',
+    mapsUrl:    document.getElementById('bizMaps')?.value?.trim() || '',
+    address:    document.getElementById('bizAddress')?.value?.trim() || '',
+    rating:     document.getElementById('bizRating')?.value || '4.5',
+    isOpen:     document.getElementById('bizOpen')?.checked ?? true,
+    coverPhoto: coverPhotoData,
+    gallery:    galleryPhotosData,
+    platforms:  getWizPlatformLinks(),
+    offers:     collectOffers(),
+    menu:       collectMenu(),
+  };
+}
+
+function collectOffers(){
+  const offers = [];
+  document.querySelectorAll('.offer-card').forEach(card => {
+    const title = card.querySelector('.offer-title-input')?.value?.trim();
+    const desc  = card.querySelector('.offer-desc-input')?.value?.trim();
+    const active = card.querySelector('.offer-toggle')?.checked ?? true;
+    if(title) offers.push({title, desc, active});
+  });
+  return offers;
+}
+
+function collectMenu(){
+  const items = [];
+  document.querySelectorAll('.menu-card').forEach(card => {
+    const name  = card.querySelector('.item-name-input')?.value?.trim();
+    const price = card.querySelector('.item-price-input')?.value?.trim();
+    const desc  = card.querySelector('.item-desc-input')?.value?.trim();
+    const photo = card.querySelector('.item-photo-preview')?.src || null;
+    if(name) items.push({name, price, desc, photo: photo?.startsWith('data:') ? photo : null});
+  });
+  return items;
+}
+
+/* ════════════════════════════════
+   PREMIUM PREVIEW PAGE
+════════════════════════════════ */
+function openPreview(){
+  const name    = document.getElementById('bizName').value.trim() || 'Your Business';
+  const city    = document.getElementById('bizCity').value.trim() || 'Your City';
+  const tagline = document.getElementById('bizTagline')?.value.trim() || '';
+  const rating  = document.getElementById('bizRating')?.value.trim() || '4.8';
+  const phone   = (document.getElementById('bizPhone')?.value||'').replace(/[^0-9]/g,'');
+  const wa      = ((document.getElementById('bizWhatsapp')?.value||'').replace(/[^0-9]/g,'')) || phone;
+  const mapsUrl = document.getElementById('bizMaps')?.value.trim() || '';
+  const address = document.getElementById('bizAddress')?.value.trim() || '';
+  const isOpen  = document.getElementById('openToggle').classList.contains('on');
+  const catId   = document.getElementById('bizType')?.value || 'restaurant';
+
+  const catEmoji={restaurant:'🍽️',clothing:'👗',jewellery:'💍',salon:'✂️',grocery:'🛒',service:'🔧',other:'🏪'}[catId]||'🏪';
+  const itemLabel={restaurant:'Menu',clothing:'Products',jewellery:'Collections',salon:'Services',grocery:'Products',service:'Services',other:'Products / Services'}[catId]||'Menu';
+  const orderLabel={restaurant:'Order Now',clothing:'Shop Now',jewellery:'Shop Now',salon:'Book Now',service:'Book Now',other:'Order Now'}[catId]||'Order';
+
+  const platLinks=getWizPlatformLinks();
+  const platforms=PLATFORM_MAP[catId]||PLATFORM_MAP.other;
+  const platEntries=Object.entries(platLinks).filter(([,u])=>u);
+  const primaryOrder=platEntries[0]?.[1]||'';
+
+  // Cover
+  const coverBg=coverPhotoData
+    ? `background:url('${coverPhotoData}') center/cover`
+    : `background:linear-gradient(135deg,#b03000,#FF5C00)`;
+
+  // Gallery
+  const galleryHtml=galleryPhotosData.length
+    ? `<div class="pp-sec">
+        <div class="pp-sec-title">📸 Gallery</div>
+        <div class="pp-gallery">
+          ${galleryPhotosData.map(src=>`<img class="pp-gimg" src="${src}" alt="">`).join('')}
+        </div>
+      </div>` : '';
+
+  // Offers
+  const offers=Array.from(document.querySelectorAll('#offersContainer input')).map(i=>i.value.trim()).filter(Boolean);
+  const offersHtml=offers.length
+    ? `<div class="pp-sec">
+        <div class="pp-sec-title">🔥 Today's Offers</div>
+        ${offers.map(o=>`<div class="pp-offer"><span>🎁</span>${o}</div>`).join('')}
+      </div>` : '';
+
+  // Products
+  const cards=Array.from(document.querySelectorAll('#productsContainer .product-card'));
+  const productsHtml=cards.map(card=>{
+    const inputs=card.querySelectorAll('input[type=text], input:not([type])');
+    const iName=(inputs[0]?.value||'').trim();
+    if(!iName) return '';
+    const price=(inputs[1]?.value||'').trim();
+    const desc=(inputs[2]?.value||'').trim();
+    const thumb=card.querySelector('.product-thumb-preview img');
+    const imgHtml=thumb
+      ? `<img class="pp-iimg" src="${thumb.src}" alt="">`
+      : `<div class="pp-iimg" style="background:linear-gradient(135deg,#fff4ee,#ffe0cc);display:flex;align-items:center;justify-content:center;font-size:1.5rem">${catEmoji}</div>`;
+    const addBtnHtml=primaryOrder
+      ? `<button class="pp-add-btn" onclick="window.open('${primaryOrder}','_blank')">+</button>` : '';
+    return `<div class="pp-item">
+      ${imgHtml}
+      <div style="flex:1;min-width:0">
+        <div class="pp-iname">${iName}</div>
+        ${desc?`<div class="pp-idesc">${desc}</div>`:''}
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        ${price?`<div class="pp-iprice">${price}</div>`:''}
+        ${addBtnHtml}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Platform section
+  const platSectionHtml=platEntries.length
+    ? `<div class="pp-sec">
+        <div class="pp-sec-title">🛒 ${orderLabel} on</div>
+        <div class="pp-plat-chips">
+          ${platEntries.map(([pid,url])=>{
+            const plat=platforms.find(p=>p.id===pid)||{icon:'🔗',name:pid};
+            return `<a class="pp-plat-chip" href="${url}" target="_blank">${plat.icon} ${plat.name}</a>`;
+          }).join('')}
+        </div>
+      </div>` : '';
+
+  // Order button action
+  const orderAction = platEntries.length===1
+    ? `window.open('${platEntries[0][1]}','_blank')`
+    : platEntries.length>1
+      ? `showOrderPicker()`
+      : `alert('No ordering platform configured yet')`;
+
+  const callAction = phone ? `window.location.href='tel:+91${phone}'` : `alert('No phone number entered')`;
+  const waAction   = wa    ? `window.open('https://wa.me/91${wa}','_blank')` : `alert('No WhatsApp number entered')`;
+  const dirAction  = mapsUrl ? `window.open('${mapsUrl}','_blank')` : `alert('No Google Maps link entered')`;
+
+  document.getElementById('previewContent').innerHTML=`
+    <div>
+      <!-- Cover -->
+      <div class="pp-cover" style="${coverBg}">
+        <div class="pp-cover-overlay"></div>
+        <div class="pp-biz-info">
+          <div class="pp-name">${name}</div>
+          <div class="pp-meta">
+            ${rating?`<div class="pp-rating">⭐ ${rating}</div>`:''}
+            <div class="pp-city">📍 ${city}</div>
+            <span class="pp-status ${isOpen?'open':'closed'}">${isOpen?'🟢 Open Now':'🔴 Closed'}</span>
+          </div>
+          ${tagline?`<div style="font-size:.78rem;color:rgba(255,255,255,.75);margin-top:6px">${tagline}</div>`:''}
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="pp-actions">
+        <button class="pp-btn call" onclick="${callAction}">📞 Call</button>
+        <button class="pp-btn wa"   onclick="${waAction}">💬 WhatsApp</button>
+        <button class="pp-btn dir"  onclick="${dirAction}">📍 Directions</button>
+        <button class="pp-btn ord"  onclick="${orderAction}">🛒 ${orderLabel}</button>
+      </div>
+
+      ${galleryHtml}
+      ${offersHtml}
+      ${productsHtml ? `<div class="pp-sec"><div class="pp-sec-title">${catEmoji} ${itemLabel}</div>${productsHtml}</div>` : ''}
+      ${platSectionHtml}
+
+      <div class="pp-footer">Powered by <strong>QwikLink</strong> ⚡</div>
+    </div>`;
+
+  // store for picker
+  window._previewPlatEntries=platEntries;
+  window._previewPlatforms=platforms;
+
+  openModal('previewModal');
+}
+
+function showOrderPicker(){
+  const platEntries=window._previewPlatEntries||[];
+  const platforms=window._previewPlatforms||[];
+  const list=platEntries.map(([pid,url])=>{
+    const plat=platforms.find(p=>p.id===pid)||{icon:'🔗',name:pid};
+    return `<a href="${url}" target="_blank" onclick="closeModal('orderPickerModal')" style="display:flex;align-items:center;gap:10px;padding:14px 16px;background:#f8f8f8;border:1.5px solid #ebebeb;border-radius:14px;font-size:.9rem;font-weight:600;color:#111;text-decoration:none;margin-bottom:8px">${plat.icon} Order on ${plat.name}</a>`;
+  }).join('');
+  document.getElementById('orderPickerList').innerHTML=list;
+  openModal('orderPickerModal');
+}
+
+/* ════════════════════════════════
+   LIVE HERO UPDATE
+════════════════════════════════ */
+function liveUpdatePreview(){
+  const name=document.getElementById('bizName')?.value;
+  const city=document.getElementById('bizCity')?.value;
+  if(name) document.querySelectorAll('.ph-rname-live').forEach(el=>el.textContent=`🏪 ${name}`);
+  if(city) document.querySelectorAll('.ph-rmeta-live').forEach(el=>el.innerHTML=`⭐ 4.8 · ${city} &nbsp;<span class="ph-open">🟢 Open</span>`);
+}
+
+/* ════════════════════════════════
+   NAV SCROLL
+════════════════════════════════ */
+window.addEventListener('scroll',()=>{
+  const nav=document.getElementById('mainNav');
+  nav.style.boxShadow=window.scrollY>50?'0 4px 24px rgba(0,0,0,.08)':'';
+});
+
+// init
+updatePlatformOptions();
+</script>
+
+<!-- ══════════════════════════════ UPGRADE MODAL -->
+<div id="upgradeModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1200;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:24px;max-width:480px;width:100%;padding:36px;position:relative;box-shadow:0 24px 80px rgba(0,0,0,.2)">
+    <button onclick="document.getElementById('upgradeModal').style.display='none'" style="position:absolute;top:16px;right:16px;border:none;background:none;font-size:1.3rem;cursor:pointer;color:#888">✕</button>
+    <div style="font-size:2.5rem;margin-bottom:12px">🚀</div>
+    <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:900;color:#0D0D0D;margin-bottom:8px">Upgrade Your Plan</div>
+    <div id="upgradeMsg" style="font-size:.9rem;color:#666;margin-bottom:28px;line-height:1.6">You've reached the free plan limit. Upgrade to create unlimited pages.</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <!-- Grow Plan -->
+      <div style="border:2px solid #FF5C00;border-radius:18px;padding:20px;background:#fff8f5;cursor:pointer" onclick="startUpgrade('grow')">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#0D0D0D">🌱 Grow Plan</div>
+          <div style="background:#FF5C00;color:#fff;border-radius:100px;padding:4px 12px;font-size:.75rem;font-weight:700">Most Popular</div>
+        </div>
+        <div style="font-size:1.5rem;font-weight:900;color:#FF5C00;font-family:'Space Mono',monospace;margin-bottom:6px">₹299<span style="font-size:.85rem;color:#888;font-family:'DM Sans',sans-serif;font-weight:400">/month</span></div>
+        <div style="font-size:.82rem;color:#555;line-height:1.7">✅ Unlimited links & QR codes<br>✅ Analytics dashboard<br>✅ Lead capture<br>✅ Comment automation</div>
+        <button onclick="startUpgrade('grow')" style="margin-top:14px;width:100%;padding:12px;background:#FF5C00;color:#fff;border:none;border-radius:100px;font-weight:700;font-size:.9rem;cursor:pointer">Get Grow Plan →</button>
+      </div>
+      <!-- Pro Plan -->
+      <div style="border:1.5px solid #e5e5e5;border-radius:18px;padding:20px;cursor:pointer" onclick="startUpgrade('pro')">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#0D0D0D;margin-bottom:8px">⚡ Pro Plan</div>
+        <div style="font-size:1.5rem;font-weight:900;color:#0D0D0D;font-family:'Space Mono',monospace;margin-bottom:6px">₹499<span style="font-size:.85rem;color:#888;font-family:'DM Sans',sans-serif;font-weight:400">/month</span></div>
+        <div style="font-size:.82rem;color:#555;line-height:1.7">✅ Everything in Grow<br>✅ Priority support<br>✅ Custom domain<br>✅ Advanced analytics</div>
+        <button onclick="startUpgrade('pro')" style="margin-top:14px;width:100%;padding:12px;background:#0D0D0D;color:#fff;border:none;border-radius:100px;font-weight:700;font-size:.9rem;cursor:pointer">Get Pro Plan →</button>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:16px;font-size:.8rem;color:#aaa">Secure payment via Razorpay • Cancel anytime</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ ANALYTICS DASHBOARD MODAL -->
+<div id="analyticsModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1200;align-items:center;justify-content:center;padding:20px;overflow-y:auto">
+  <div style="background:#fff;border-radius:24px;max-width:680px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.2)">
+    <div style="padding:28px 28px 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;border-bottom:1px solid #f0f0f0;padding-bottom:16px;z-index:1">
+      <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:#0D0D0D">📊 My Links & Analytics</div>
+      <button onclick="document.getElementById('analyticsModal').style.display='none'" style="border:none;background:none;font-size:1.3rem;cursor:pointer;color:#888">✕</button>
+    </div>
+    <div style="padding:24px 28px">
+      <!-- Plan badge -->
+      <div id="planBadge" style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:100px;background:#fff8f5;border:1px solid rgba(255,92,0,.2);margin-bottom:20px">
+        <span id="planIcon">🆓</span>
+        <span id="planLabel" style="font-weight:700;font-size:.85rem;color:#FF5C00"></span>
+        <span id="planLinkCount" style="font-size:.8rem;color:#888"></span>
+      </div>
+      <!-- Links table -->
+      <div id="linksTable" style="display:flex;flex-direction:column;gap:12px"></div>
+      <!-- Empty state -->
+      <div id="linksEmpty" style="display:none;text-align:center;padding:40px 20px;color:#aaa">
+        <div style="font-size:3rem;margin-bottom:12px">🔗</div>
+        <div style="font-weight:700;color:#888">No links yet</div>
+        <div style="font-size:.85rem;margin-top:6px">Create your first business page to get started</div>
+        <button onclick="document.getElementById('analyticsModal').style.display='none';openModal('wizardModal')" style="margin-top:16px;padding:12px 24px;background:#FF5C00;color:#fff;border:none;border-radius:100px;font-weight:700;cursor:pointer">Create Page →</button>
+      </div>
+      <!-- Create new -->
+      <div id="createNewLinkArea" style="margin-top:20px;text-align:center"></div>
+    </div>
+
+    <!-- Lead Capture Section -->
+    <div style="border-top:1px solid #f0f0f0;padding:24px 28px">
+      <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:#0D0D0D;margin-bottom:16px">👥 Lead Capture</div>
+      <div id="leadsTable" style="display:flex;flex-direction:column;gap:10px"></div>
+      <div id="leadsEmpty" style="font-size:.85rem;color:#aaa;text-align:center;padding:20px">No leads yet. Leads appear when visitors interact with your pages.</div>
+    </div>
+
+    <!-- Comment Automation Section -->
+    <div style="border-top:1px solid #f0f0f0;padding:24px 28px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:#0D0D0D">🤖 Comment Automation</div>
+          <div style="font-size:.8rem;color:#888;margin-top:4px">Auto-reply DMs when someone comments keywords on your posts</div>
+        </div>
+        <label style="position:relative;display:inline-block;width:48px;height:26px;cursor:pointer">
+          <input type="checkbox" id="autoReplyToggle" style="opacity:0;width:0;height:0" onchange="toggleAutoReply(this.checked)">
+          <span style="position:absolute;inset:0;background:#e5e5e5;border-radius:100px;transition:.3s" id="autoReplyTrack"></span>
+          <span style="position:absolute;left:3px;top:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 4px rgba(0,0,0,.2)" id="autoReplyThumb"></span>
+        </label>
+      </div>
+      <div style="background:#f8f8f8;border-radius:16px;padding:18px;margin-bottom:14px">
+        <div style="font-size:.8rem;font-weight:700;color:#555;margin-bottom:10px;font-family:'Space Mono',monospace">TRIGGER KEYWORDS</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+          <span style="padding:6px 14px;background:#fff0eb;border:1px solid rgba(255,92,0,.2);border-radius:100px;font-size:.78rem;font-weight:700;color:#FF5C00">location</span>
+          <span style="padding:6px 14px;background:#fff0eb;border:1px solid rgba(255,92,0,.2);border-radius:100px;font-size:.78rem;font-weight:700;color:#FF5C00">menu</span>
+          <span style="padding:6px 14px;background:#fff0eb;border:1px solid rgba(255,92,0,.2);border-radius:100px;font-size:.78rem;font-weight:700;color:#FF5C00">price</span>
+          <span style="padding:6px 14px;background:#fff0eb;border:1px solid rgba(255,92,0,.2);border-radius:100px;font-size:.78rem;font-weight:700;color:#FF5C00">address</span>
+          <span style="padding:6px 14px;background:#fff0eb;border:1px solid rgba(255,92,0,.2);border-radius:100px;font-size:.78rem;font-weight:700;color:#FF5C00">details</span>
+          <span style="padding:6px 14px;background:#fff0eb;border:1px solid rgba(255,92,0,.2);border-radius:100px;font-size:.78rem;font-weight:700;color:#FF5C00">link</span>
+        </div>
+        <div style="font-size:.8rem;font-weight:700;color:#555;margin-bottom:8px;font-family:'Space Mono',monospace">AUTO DM MESSAGE</div>
+        <textarea id="autoReplyMsg" style="width:100%;border:1.5px solid #e5e5e5;border-radius:12px;padding:12px;font-family:'DM Sans',sans-serif;font-size:.85rem;color:#333;resize:none;outline:none;background:#fff;line-height:1.6" rows="4" placeholder="Hi! Here's our page with menu, location, and ordering options 👇&#10;https://qwiklink-app.netlify.app/?slug=yourslug"></textarea>
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <select id="autoReplyPage" style="flex:1;padding:10px 14px;border:1.5px solid #e5e5e5;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;color:#333;outline:none;cursor:pointer">
+            <option value="">Select page to link</option>
+          </select>
+          <button onclick="saveAutoReply()" style="padding:10px 20px;background:#FF5C00;color:#fff;border:none;border-radius:10px;font-weight:700;font-size:.85rem;cursor:pointer">Save</button>
+        </div>
+      </div>
+      <div style="background:#fff8f0;border:1px solid rgba(255,92,0,.2);border-radius:12px;padding:14px;font-size:.8rem;color:#666;line-height:1.7">
+        ⚠️ <strong>Instagram API required</strong> for live automation. Connect your Instagram Business account in settings. <a href="#" style="color:#FF5C00;font-weight:700">Connect Instagram →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
